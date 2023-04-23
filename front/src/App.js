@@ -1,13 +1,15 @@
 import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import LoginRegisterPills from "./components/LoginRegisterPills";
 import Container from "react-bootstrap/Container";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
 
 const App = () => {
     return (
-        <Container className="my-5">
-            <Login />
-            <Register />
+        <Container>
+            <Header />
+            <LoginRegisterPills />
+            <Footer />
         </Container>
     );
 };
