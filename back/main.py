@@ -1,11 +1,11 @@
 from flask import Flask
+from endpoints.users import users_blueprint
+from endpoints.auth import auth_blueprint
 
 app = Flask(__name__)
 
-
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+app.register_blueprint(users_blueprint, url_prefix="/users")
+app.register_blueprint(auth_blueprint, url_prefix="/auth")
 
 
 if __name__ == "__main__":
