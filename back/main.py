@@ -5,6 +5,9 @@ from models import db
 from dotenv import load_dotenv
 from os import environ
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+from datetime import timedelta
+
 
 load_dotenv()
 
@@ -21,6 +24,15 @@ app.config[
     "SQLALCHEMY_DATABASE_URI"
 ] = f"{db_type}://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
 
+app.config["JWT_SECRET_KEY"] = environ.get("AUTH_SECRET")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=3)
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+
+CORS(
+    app,
+    allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
+    supports_credentials=True,
+)
 db.init_app(app)
 jwt = JWTManager(app)
 

@@ -23,18 +23,23 @@ def register():
     user = User.query.filter_by(username=username).first()
 
     if user:
-        return jsonify({"message": "User with that name already exists"}), 400
+        return jsonify({"message": "User with that name already exists"}), 409
 
     user = User(
         secret=str(uuid4()),
         username=username,
-        password=password,
+        password=pbkdf2_sha256.encrypt(password),
     )
 
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"message": "Successfully registered."}), 201
+    data = {
+        "access_token": create_access_token(identity=user.secret),
+        "refresh_token": create_refresh_token(identity=user.secret),
+    }
+
+    return jsonify(data), 201
 
 
 @auth_blueprint.route("/login", methods=["POST"])
@@ -56,8 +61,8 @@ def login():
         return jsonify({"message": "Invalid username or password"}), 409
 
     data = {
-        "access_token": create_access_token(identity=user.token),
-        "refresh_token": create_refresh_token(identity=user.token),
+        "access_token": create_access_token(identity=user.secret),
+        "refresh_token": create_refresh_token(identity=user.secret),
     }
 
     return jsonify(data), 201
