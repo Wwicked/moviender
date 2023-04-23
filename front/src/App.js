@@ -8,7 +8,11 @@ const App = () => {
     return (
         <Container>
             <Header />
-            <LoginRegisterPills />
+
+            <div className="my-5">
+                <LoginRegisterPills />
+            </div>
+
             <Footer />
         </Container>
     );
