@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import Register from "./Register";
-import Login from "./LoginCom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 const App = () => {
     return (
