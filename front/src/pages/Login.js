@@ -78,9 +78,9 @@ const Login = () => {
 
     return (
         <Container>
-            <Container className="d-flex align-items-center h-custom-2 justify-content-center">
+            <Container className="d-flex justify-content-center">
                 <Form
-                    style={{ width: "23rem" }}
+                    style={{ width: "100%" }}
                     onSubmit={handleSubmit(submitForm)}
                     onChange={() => {
                         setLoginError(false);
