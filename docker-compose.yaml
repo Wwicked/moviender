@@ -1,9 +1,31 @@
 version: "3"
 services:
+    db:
+        image: postgres
+        restart: always
+        ports:
+            - "5455:5432"
+
+        environment:
+            POSTGRES_USER: SuperSecretUserName
+            POSTGRES_PASSWORD: VeryStrongPasswordThatNooneWillEverGuess
+            POSTGRES_DB: postgres
+
     back:
         build: ./back
         ports:
             - "5000:5000"
+
+        depends_on:
+            - db
+
+        environment:
+            DB_TYPE: postgresql
+            DB_USER: SuperSecretUserName
+            DB_PASS: VeryStrongPasswordThatNooneWillEverGuess
+            DB_HOST: db
+            DB_PORT: 5432
+            DB_NAME: postgres
 
     front:
         build: ./front
