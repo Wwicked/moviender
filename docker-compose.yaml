@@ -20,6 +20,8 @@ services:
             - db
 
         environment:
+            AUTH_SECRET: asdbkrweRADNHIA534
+
             DB_TYPE: postgresql
             DB_USER: SuperSecretUserName
             DB_PASS: VeryStrongPasswordThatNooneWillEverGuess
@@ -27,7 +29,7 @@ services:
             DB_PORT: 5432
             DB_NAME: postgres
 
-    front:
-        build: ./front
-        ports:
-            - "3000:3000"
+    # front:
+    #     build: ./front
+    #     ports:
+    #         - "3000:3000"
