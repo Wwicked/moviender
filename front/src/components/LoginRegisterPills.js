@@ -14,7 +14,7 @@ const LoginRegisterPills = () => {
                     variant="outline-secondary"
                     style={{ width: "45%" }}
                     onClick={() => {
-                        setShowLogin(!showLogin);
+                        setShowLogin(true);
                     }}
                 >
                     Login
@@ -24,7 +24,7 @@ const LoginRegisterPills = () => {
                     variant="outline-secondary"
                     style={{ width: "45%" }}
                     onClick={() => {
-                        setShowLogin(!showLogin);
+                        setShowLogin(false);
                     }}
                 >
                     Register
