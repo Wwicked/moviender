@@ -40,7 +40,7 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [registerError, setRegisterError] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState("");
-    const [setCookie] = useCookies(["user"]);
+    const [cookies, setCookie] = useCookies(["user"]);
 
     const {
         register,

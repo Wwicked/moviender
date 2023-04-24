@@ -39,7 +39,7 @@ const Loginnew = () => {
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
-    const [setCookie] = useCookies(["user"]);
+    const [cookies, setCookie] = useCookies(["user"]);
 
     const {
         register,
@@ -64,14 +64,13 @@ const Loginnew = () => {
                 setLoading(false);
             })
             .catch((err) => {
-                setLoginError(true);
-                setLoginErrorMessage("Unknown error occured. Please try again.");
-
-                if (err.response) {
+                if (err?.response?.status) {
                     if (err.response.status === 409) {
+                        setLoginError(true);
                         setLoginErrorMessage("Invalid username or password.");
                     }
-                } else if (err.request) {
+                } else if (err?.request) {
+                    setLoginError(true);
                     setLoginErrorMessage("Client-side error. Please try again.");
                 }
 
