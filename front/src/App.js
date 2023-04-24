@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import LoginRegisterPills from "./components/LoginRegisterPills";
 import Container from "react-bootstrap/Container";
+import Login from "./pages/Login";
 
 const App = () => {
     return (
@@ -10,7 +10,7 @@ const App = () => {
             <Header />
 
             <div className="my-5">
-                <LoginRegisterPills />
+                <Login />
             </div>
 
             <Footer />
