@@ -10,7 +10,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-bootstrap/Spinner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 const MIN_NAME = 2;
@@ -41,6 +41,7 @@ const Register = () => {
     const [registerError, setRegisterError] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState("");
     const [cookies, setCookie] = useCookies(["user"]);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -64,6 +65,8 @@ const Register = () => {
                 setCookie("refresh_token", res?.data?.refresh_token);
 
                 setLoading(false);
+
+                navigate("/");
             })
             .catch((err) => {
                 setRegisterError(true);
