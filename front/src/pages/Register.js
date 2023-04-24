@@ -78,87 +78,105 @@ const Register = () => {
     };
 
     return (
-        <Container>
-            <Container className="d-flex align-items-center h-custom-2 justify-content-center">
+        <Container className="my-5 gradient-form">
+            <Col
+                md={5}
+                lg={5}
+                className="mb-5"
+                style={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}
+            >
+                <div className="text-center">
+                    <img
+                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                        style={{ width: "185px" }}
+                        alt="logo"
+                    />
+                </div>
+
+                {registerError && (
+                    <Row className="my-4">
+                        <Alert variant="danger">{registerErrorMessage}</Alert>
+                    </Row>
+                )}
+
                 <Form
-                    style={{ width: "23rem" }}
+                    style={{ width: "100%" }}
                     onSubmit={handleSubmit(submitForm)}
+                    className="justify-content-center"
                     onChange={() => {
                         setRegisterError(false);
                         setRegisterErrorMessage("");
                     }}
                 >
-                    <Col>
-                        {registerError && (
-                            <Row className="my-4">
-                                <Alert variant="danger">{registerErrorMessage}</Alert>
-                            </Row>
-                        )}
-
-                        <Row className="my-4">
-                            <Form.Group>
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    className={`form-control form-control-lg ${errors?.username && "is-invalid"}`}
-                                    disabled={loading}
-                                    {...register("username")}
-                                />
-
-                                <Form.Control.Feedback type="invalid">
-                                    {errors?.username?.message}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Row>
-
-                        <Row className="my-4">
-                            <Form.Group>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    className={`form-control form-control-lg ${errors?.password && "is-invalid"}`}
-                                    disabled={loading}
-                                    {...register("password")}
-                                />
-
-                                <Form.Control.Feedback type="invalid">
-                                    {errors?.password?.message}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Row>
-
-                        <Row className="my-4">
-                            <Form.Group>
-                                <Form.Label>Confirm password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    className={`form-control form-control-lg ${
-                                        (errors?.confirm_password || errors?.password) && "is-invalid"
-                                    }`}
-                                    disabled={loading}
-                                    {...register("confirm_password")}
-                                />
-
-                                <Form.Control.Feedback type="invalid">
-                                    {errors?.confirm_password?.message}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Row>
-
-                        <Row className="my-5">
-                            <Button
-                                className="btn-block"
-                                variant="primary"
-                                size="medium"
-                                type="submit"
+                    <Row className="mb-4">
+                        <Form.Group>
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                type="text"
+                                className={`form-control form-control-lg ${errors?.username && "is-invalid"}`}
                                 disabled={loading}
-                            >
-                                {loading ? <Spinner animation="border" variant="light" size="sm" /> : "Register"}
-                            </Button>
-                        </Row>
-                    </Col>
+                                {...register("username")}
+                            />
+
+                            <Form.Control.Feedback type="invalid">{errors?.username?.message}</Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+
+                    <Row className="mb-4">
+                        <Form.Group>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                className={`form-control form-control-lg ${errors?.password && "is-invalid"}`}
+                                disabled={loading}
+                                {...register("password")}
+                            />
+
+                            <Form.Control.Feedback type="invalid">{errors?.password?.message}</Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+
+                    <Row className="mb-4">
+                        <Form.Group>
+                            <Form.Label>Confirm password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                className={`form-control form-control-lg ${
+                                    (errors?.confirm_password || errors?.password) && "is-invalid"
+                                }`}
+                                disabled={loading}
+                                {...register("confirm_password")}
+                            />
+
+                            <Form.Control.Feedback type="invalid">
+                                {errors?.confirm_password?.message}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+
+                    <div className="text-center mb-5 mt-5">
+                        <Button className="mb-4 w-100 gradient-custom-2" role="submit" type="submit" disabled={loading}>
+                            {loading ? <Spinner animation="border" variant="light" size="sm" /> : "Sign up"}
+                        </Button>
+
+                        <a className="text-dark" href="#!">
+                            Forgot password?
+                        </a>
+                    </div>
                 </Form>
-            </Container>
+
+                <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
+                    <p className="mb-0">
+                        Already have an account?{" "}
+                        <a className="text-dark" href="#!">
+                            Log in now!
+                        </a>
+                    </p>
+                </div>
+            </Col>
         </Container>
     );
 };
