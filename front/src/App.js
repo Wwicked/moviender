@@ -3,9 +3,12 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
-const ProtectedRoute = ({ user, redirectPath = "/login" }) => {
-    if (!user) {
+const ProtectedRoute = ({ redirectPath = "/login" }) => {
+    const [cookies] = useCookies(["user"]);
+
+    if (!cookies.access_token) {
         return <Navigate to={redirectPath} replace />;
     }
 
@@ -18,7 +21,7 @@ const App = () => {
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/register" element={<Register />} />
 
-            <Route element={<ProtectedRoute user={null} />}>
+            <Route element={<ProtectedRoute />}>
                 <Route exact path="/" element={<Home />} />
             </Route>
         </Routes>

@@ -39,7 +39,7 @@ const Loginnew = () => {
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
-    const [cookies, setCookie] = useCookies(["user"]);
+    const [setCookie] = useCookies(["user"]);
 
     const {
         register,
