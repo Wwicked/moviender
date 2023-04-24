@@ -2,6 +2,7 @@ import React from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import PageNotFound from "./pages/PageNotFound";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -24,6 +25,8 @@ const App = () => {
             <Route element={<ProtectedRoute />}>
                 <Route exact path="/" element={<Home />} />
             </Route>
+
+            <Route path="*" element={<PageNotFound />} />
         </Routes>
     );
 };
