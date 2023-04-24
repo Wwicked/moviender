@@ -1,5 +1,4 @@
-import axios from "axios";
-import API_URL from "./api";
+import api from "./api";
 
 const login = (username, password) => {
     const data = new FormData();
@@ -7,7 +6,7 @@ const login = (username, password) => {
     data.append("username", username);
     data.append("password", password);
 
-    return axios.post(`${API_URL}/auth/login`, data);
+    return api.post("/auth/login", data);
 };
 
 const register = (username, password) => {
@@ -16,7 +15,7 @@ const register = (username, password) => {
     data.append("username", username);
     data.append("password", password);
 
-    return axios.post(`${API_URL}/auth/register`, data);
+    return api.post("/auth/register", data);
 };
 
 const authservice = {

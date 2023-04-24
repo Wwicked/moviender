@@ -1,11 +1,7 @@
-import axios from "axios";
-import API_URL from "./api";
-import authHeader from "./headers";
-
-const WITH_TOKEN = { headers: authHeader() };
+import api from "./api";
 
 const read = () => {
-    return axios.get(`${API_URL}/users/`, WITH_TOKEN);
+    return api.get(`/users/`);
 };
 
 const UserService = {
