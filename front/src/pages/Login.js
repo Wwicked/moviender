@@ -56,7 +56,6 @@ const Login = () => {
                 setLoading(true);
 
                 // TODO: Log user in
-                console.log(`Login response: ${JSON.stringify(res.data)}`);
 
                 setLoading(false);
             })
@@ -85,8 +84,6 @@ const Login = () => {
                     onChange={() => {
                         setLoginError(false);
                         setLoginErrorMessage("");
-                        console.log(`Username: ${JSON.stringify(errors?.username?.message)}`);
-                        console.log(`Username: ${JSON.stringify(errors?.password?.message)}`);
                     }}
                 >
                     <Col>

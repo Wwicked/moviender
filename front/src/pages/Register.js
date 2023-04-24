@@ -58,7 +58,6 @@ const Register = () => {
                 setLoading(true);
 
                 // TODO: Log user in after registering
-                console.log(`Register response: ${JSON.stringify(res.data)}`);
 
                 setLoading(false);
             })
