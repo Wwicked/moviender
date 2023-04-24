@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 
 class Config:
-    MAX_USER_SECRET = 50
+    MAX_USER_TOKEN = 50
     MAX_USER_NAME = 50
     MAX_USER_PASSWORD = 150  # Bigger to store the hash
 
@@ -16,10 +16,10 @@ class Base(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-class User(db.Model):
+class User(Base):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    secret = db.Column(db.String(Config.MAX_USER_SECRET), unique=True)
+    token = db.Column(db.String(Config.MAX_USER_TOKEN), unique=True)
     username = db.Column(db.String(Config.MAX_USER_NAME))
     password = db.Column(db.String(Config.MAX_USER_PASSWORD))
