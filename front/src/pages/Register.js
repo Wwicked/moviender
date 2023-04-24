@@ -10,6 +10,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-bootstrap/Spinner";
+import { Link } from "react-router-dom";
 
 const MIN_NAME = 2;
 const MAX_NAME = 25;
@@ -171,9 +172,9 @@ const Register = () => {
                 <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
                     <p className="mb-0">
                         Already have an account?{" "}
-                        <a className="text-dark" href="#!">
+                        <Link className="text-dark" to="/login">
                             Log in now!
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </Col>
