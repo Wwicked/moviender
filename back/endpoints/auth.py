@@ -26,7 +26,7 @@ def register():
         return jsonify({"message": "User with that name already exists"}), 409
 
     user = User(
-        secret=str(uuid4()),
+        token=str(uuid4()),
         username=username,
         password=pbkdf2_sha256.encrypt(password),
     )
@@ -35,8 +35,8 @@ def register():
     db.session.commit()
 
     data = {
-        "access_token": create_access_token(identity=user.secret),
-        "refresh_token": create_refresh_token(identity=user.secret),
+        "access_token": create_access_token(identity=user.token),
+        "refresh_token": create_refresh_token(identity=user.token),
     }
 
     return jsonify(data), 201
@@ -61,8 +61,8 @@ def login():
         return jsonify({"message": "Invalid username or password"}), 409
 
     data = {
-        "access_token": create_access_token(identity=user.secret),
-        "refresh_token": create_refresh_token(identity=user.secret),
+        "access_token": create_access_token(identity=user.token),
+        "refresh_token": create_refresh_token(identity=user.token),
     }
 
-    return jsonify(data), 201
+    return jsonify(data), 200
