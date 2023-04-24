@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const MIN_NAME = 2;
 const MAX_NAME = 25;
@@ -39,6 +40,7 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [registerError, setRegisterError] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState("");
+    const [cookies, setCookie] = useCookies(["user"]);
 
     const {
         register,
@@ -54,11 +56,12 @@ const Register = () => {
     });
 
     const submitForm = async (data) => {
+        setLoading(true);
+
         AuthService.register(data.username, data.password)
             .then((res) => {
-                setLoading(true);
-
-                // TODO: Log user in after registering
+                setCookie("access_token", res?.data?.access_token);
+                setCookie("refresh_token", res?.data?.refresh_token);
 
                 setLoading(false);
             })

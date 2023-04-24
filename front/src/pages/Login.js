@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const MIN_NAME = 2;
 const MAX_NAME = 25;
@@ -38,6 +39,7 @@ const Loginnew = () => {
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
+    const [cookies, setCookie] = useCookies(["user"]);
 
     const {
         register,
@@ -56,7 +58,8 @@ const Loginnew = () => {
 
         AuthService.login(data.username, data.password)
             .then((res) => {
-                // TODO: Log user in
+                setCookie("access_token", res?.data?.access_token);
+                setCookie("refresh_token", res?.data?.refresh_token);
 
                 setLoading(false);
             })
