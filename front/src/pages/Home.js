@@ -1,14 +1,10 @@
-import React, { useEffect } from "react";
-import UserService from "../services/user.service";
+import React from "react";
+import { useSelector } from "react-redux";
 
 const Home = () => {
-    useEffect(() => {
-        UserService.read().then((res) => {
-            console.log(`Response: ${JSON.stringify(res)}`);
-        });
-    }, []);
+    const { user } = useSelector((state) => state.user);
 
-    return <div>Home</div>;
+    return <div>User is: {JSON.stringify(user)}</div>;
 };
 
 export default Home;
