@@ -11,7 +11,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { updateAuthCookiesAndHeader } from "../services/api";
+import UserService from "../services/user.service";
+import { useDispatch } from "react-redux";
+import { SET_USER } from "../reducers/types";
 
 const MIN_NAME = 2;
 const MAX_NAME = 25;
@@ -39,8 +42,8 @@ const Loginnew = () => {
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
-    const [cookies, setCookie] = useCookies(["user"]);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const {
         register,
@@ -59,11 +62,19 @@ const Loginnew = () => {
 
         AuthService.login(data.username, data.password)
             .then((res) => {
-                setCookie("access_token", res?.data?.access_token);
-                setCookie("refresh_token", res?.data?.refresh_token);
+                const at = res?.data?.access_token;
+                const rt = res?.data?.refresh_token;
+
+                updateAuthCookiesAndHeader(at, rt);
+
+                UserService.read().then((res) => {
+                    dispatch({
+                        type: SET_USER,
+                        payload: res.data,
+                    });
+                });
 
                 setLoading(false);
-
                 navigate("/");
             })
             .catch((err) => {
