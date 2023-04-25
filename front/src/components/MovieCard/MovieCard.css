@@ -1,0 +1,93 @@
+.movie-card {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 1.65rem !important;
+}
+
+.release {
+    font-size: 1rem;
+    color: rgb(56, 56, 56);
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.button-group button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.image-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 60vh;
+    max-height: 60vh;
+}
+
+.image-wrapper img {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-width: auto;
+    min-height: 50vh;
+    max-width: none;
+    max-height: none;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.image-overlay.left {
+    left: 0;
+}
+
+.image-overlay.right {
+    right: 0;
+}
+
+.image-overlay:hover {
+    opacity: 0.2;
+}
+
+.image-indicators {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.indicator {
+    width: 35px;
+    height: 4px;
+    border-radius: 10%;
+    background-color: #616161;
+    margin: 0 8px;
+    transition: all 0.4s ease;
+}
+
+.indicator.active {
+    background-color: #ffffff;
+}
