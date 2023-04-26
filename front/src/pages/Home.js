@@ -19,23 +19,40 @@ const movie = {
 const Home = () => {
     const { user } = useSelector((state) => state.user);
 
+    const [swipeBlocked, setSwipeBlocked] = useState(false);
     const [buttonsBlocked, setButtonsBlocked] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState(null);
 
+    const handleSwipeLeft = (movie) => {
+        console.log(`Swipe left!`);
+
+        handleDislike(movie);
+    };
+
+    const handleSwipeRight = (movie) => {
+        console.log(`Swipe right!`);
+
+        handleLike(movie);
+    };
+
     const handleLike = (movie) => {
         setButtonsBlocked(true);
+        setSwipeBlocked(true);
 
         UserService.like(user.id, movie.id).then((res) => {
             setButtonsBlocked(false);
+            setSwipeBlocked(false);
         });
     };
 
     const handleDislike = (movie) => {
         setButtonsBlocked(true);
+        setSwipeBlocked(true);
 
         UserService.dislike(user.id, movie.id).then((res) => {
             setButtonsBlocked(false);
+            setSwipeBlocked(false);
         });
     };
 
@@ -69,6 +86,9 @@ const Home = () => {
                 <MovieCard
                     movie={movie}
                     buttonsBlocked={buttonsBlocked}
+                    swipeBlocked={swipeBlocked}
+                    onSwipeLeft={handleSwipeLeft}
+                    onSwipeRight={handleSwipeRight}
                     onLike={handleLike}
                     onDislike={handleDislike}
                     onWatchLater={handleWatchLater}
