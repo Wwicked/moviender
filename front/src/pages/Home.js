@@ -22,7 +22,9 @@ const Home = () => {
                 <p>User: {JSON.stringify(user, null, 4)}</p>
             </Container>
 
-            <MovieCard movie={movie} />
+            <Container className="d-flex justify-content-center">
+                <MovieCard movie={movie} />
+            </Container>
         </Container>
     );
 };

@@ -24,7 +24,7 @@ const MovieCard = ({ movie }) => {
     };
 
     return (
-        <Col xs={12} md={6} lg={4} xl={3}>
+        <Col xs={12} md={9} lg={8} xl={8}>
             <Card className="movie-card">
                 <ImageIndicator totalImages={movie.images.length} currentIndex={imageIndex} />
 
