@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import MovieCard from "../components/MovieCard/MovieCard";
+import InfoModal from "../components/MovieCard/InfoModal";
+import UserService from "../services/user.service";
 
 const movie = {
+    id: 1,
     title: "The Godfather",
     year: 1972,
     images: [
@@ -16,6 +19,46 @@ const movie = {
 const Home = () => {
     const { user } = useSelector((state) => state.user);
 
+    const [buttonsBlocked, setButtonsBlocked] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState(null);
+
+    const handleLike = (movie) => {
+        setButtonsBlocked(true);
+
+        UserService.like(user.id, movie.id).then((res) => {
+            setButtonsBlocked(false);
+        });
+    };
+
+    const handleDislike = (movie) => {
+        setButtonsBlocked(true);
+
+        UserService.dislike(user.id, movie.id).then((res) => {
+            setButtonsBlocked(false);
+        });
+    };
+
+    const handleWatchLater = (movie) => {
+        setButtonsBlocked(true);
+
+        UserService.watchLater(user.id, movie.id).then((res) => {
+            setButtonsBlocked(false);
+        });
+    };
+
+    const handleInfo = (movie) => {
+        setButtonsBlocked(true);
+        setShowModal(true);
+        setModalData(movie);
+    };
+
+    const handleModalClose = () => {
+        setButtonsBlocked(false);
+        setShowModal(false);
+        setModalData(null);
+    };
+
     return (
         <Container>
             <Container>
@@ -23,7 +66,15 @@ const Home = () => {
             </Container>
 
             <Container className="d-flex justify-content-center">
-                <MovieCard movie={movie} />
+                <MovieCard
+                    movie={movie}
+                    buttonsBlocked={buttonsBlocked}
+                    onLike={handleLike}
+                    onDislike={handleDislike}
+                    onWatchLater={handleWatchLater}
+                    onInfo={handleInfo}
+                />
+                <InfoModal show={showModal} movie={modalData} onClose={handleModalClose} />
             </Container>
         </Container>
     );

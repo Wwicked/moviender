@@ -12,7 +12,7 @@ const ImageIndicator = ({ totalImages, currentIndex }) => {
     return <div className="image-indicators">{indicators}</div>;
 };
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, buttonsBlocked, onLike, onDislike, onWatchLater, onInfo }) => {
     const [imageIndex, setImageIndex] = useState(0);
 
     const handleLeftClick = () => {
@@ -41,19 +41,43 @@ const MovieCard = ({ movie }) => {
                     </Card.Subtitle>
 
                     <div className="button-group">
-                        <Button className="dislike" variant="outline-danger">
+                        <Button
+                            className="dislike"
+                            onClick={() => {
+                                if (!buttonsBlocked) onDislike(movie);
+                            }}
+                            variant="outline-danger"
+                        >
                             <FontAwesomeIcon icon={faX} />
                         </Button>
 
-                        <Button className="watch-later" variant="outline-primary">
+                        <Button
+                            className="watch-later"
+                            onClick={() => {
+                                if (!buttonsBlocked) onWatchLater(movie);
+                            }}
+                            variant="outline-primary"
+                        >
                             <FontAwesomeIcon icon={faClock} />
                         </Button>
 
-                        <Button className="info" variant="outline-primary">
+                        <Button
+                            className="info"
+                            onClick={() => {
+                                if (!buttonsBlocked) onInfo(movie);
+                            }}
+                            variant="outline-primary"
+                        >
                             <FontAwesomeIcon icon={faQuestion} />
                         </Button>
 
-                        <Button className="like" variant="outline-success">
+                        <Button
+                            className="like"
+                            onClick={() => {
+                                if (!buttonsBlocked) onLike(movie);
+                            }}
+                            variant="outline-success"
+                        >
                             <FontAwesomeIcon icon={faHeart} />
                         </Button>
                     </div>
