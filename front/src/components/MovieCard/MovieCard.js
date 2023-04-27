@@ -129,7 +129,7 @@ const MovieCard = ({
                         </Button>
 
                         <Button
-                            className="watch-later shadowm"
+                            className="watch-later shadow"
                             onClick={() => {
                                 if (!buttonsBlocked) onWatchLater(movie);
                             }}
