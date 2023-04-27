@@ -119,7 +119,7 @@ const MovieCard = ({
 
                     <div className="button-group">
                         <Button
-                            className="dislike"
+                            className="dislike shadow"
                             onClick={() => {
                                 if (!buttonsBlocked) onDislike(movie);
                             }}
@@ -129,7 +129,7 @@ const MovieCard = ({
                         </Button>
 
                         <Button
-                            className="watch-later"
+                            className="watch-later shadowm"
                             onClick={() => {
                                 if (!buttonsBlocked) onWatchLater(movie);
                             }}
@@ -143,13 +143,13 @@ const MovieCard = ({
                             onClick={() => {
                                 if (!buttonsBlocked) onInfo(movie);
                             }}
-                            variant="outline-primary"
+                            variant="outline-primary shadow"
                         >
                             <FontAwesomeIcon icon={faQuestion} />
                         </Button>
 
                         <Button
-                            className="like"
+                            className="like shadow"
                             onClick={() => {
                                 if (!buttonsBlocked) onLike(movie);
                             }}
