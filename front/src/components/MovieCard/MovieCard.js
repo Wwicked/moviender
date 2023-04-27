@@ -65,14 +65,6 @@ const MovieCard = ({
         delta: 80,
     });
 
-    const cardStyle = {
-        transform: `translate(${
-            swipeDirection === "left" ? "-100%" : swipeDirection === "right" ? "100%" : `${offsetX}px`
-        })`,
-        transition: dragging ? "none" : "transform 0.3s ease-in-out",
-        cursor: dragging ? "grabbing" : "grab",
-    };
-
     const handleMouseDown = () => setDragging(true);
     const handleMouseUp = () => setDragging(false);
     const handleTouchStart = () => setDragging(true);
@@ -91,6 +83,14 @@ const MovieCard = ({
 
     const handleRightClick = () => {
         setImageIndex(imageIndex === movie.images.length - 1 ? imageIndex : imageIndex + 1);
+    };
+
+    const cardStyle = {
+        transform: `translate(${
+            swipeDirection === "left" ? "-100%" : swipeDirection === "right" ? "100%" : `${offsetX}px`
+        })`,
+        transition: dragging ? "none" : "transform 0.3s ease-in-out",
+        cursor: dragging ? "grabbing" : "grab",
     };
 
     return (

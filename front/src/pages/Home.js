@@ -8,12 +8,47 @@ import UserService from "../services/user.service";
 const movie = {
     id: 1,
     title: "The Godfather",
+    description:
+        "Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger. Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger. Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger.",
     year: 1972,
     images: [
         "https://www.themoviedb.org/t/p/w1280/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg",
         "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
     ],
-    genres: ["Action", "Thriller"],
+    funFacts: [
+        {
+            header: "The horse's head was real! ",
+            content:
+                "...as were actor John Marley’s screams. A fake horse head was used in rehearsals, but when the cameras were actually rolling, Coppola replaced it with the real thing, much to Marley’s surprise.",
+        },
+    ],
+    genres: ["Crime", "Drama"],
+    cast: [
+        {
+            real: "Al Pacino",
+            movie: "Michael Corleone",
+        },
+        {
+            real: "Marlon Brando",
+            movie: "Vito Corleone",
+        },
+        {
+            real: "James Caan",
+            movie: "Sonny Corleone",
+        },
+        {
+            real: "Diane Keaton",
+            movie: "Kay Adams-Corleone",
+        },
+        {
+            real: "Talia Shire",
+            movie: "Connie Corleone",
+        },
+        {
+            real: "John Cazale",
+            movie: "Fredo Corleone",
+        },
+    ],
 };
 
 const Home = () => {
