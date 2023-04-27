@@ -2,6 +2,15 @@
     margin-bottom: 15px;
 }
 
+.movie-info-headers {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.movie-info-headers-value {
+    margin-top: 8px;
+}
+
 .movie-info-title {
     padding: 0;
     font-weight: bold;
