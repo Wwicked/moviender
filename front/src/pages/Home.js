@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Container } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import MovieCard from "../components/MovieCard/MovieCard";
 import InfoModal from "../components/MovieCard/InfoModal";
 import UserService from "../services/user.service";
 import "./Home.css";
 
-const movie = {
+const dummyMovieOne = {
     id: 1,
     title: "The Godfather",
     description:
@@ -21,7 +21,7 @@ const movie = {
         {
             header: "The horse's head was real! ",
             content:
-                "...as were actor John Marley’s screams. A fake horse head was used in rehearsals, but when the cameras were actually rolling, Coppola replaced it with the real thing, much to Marley’s surprise.",
+                "...as were actor John Marley's screams. A fake horse head was used in rehearsals, but when the cameras were actually rolling, Coppola replaced it with the real thing, much to Marley's surprise.",
         },
     ],
     genres: ["Crime", "Drama", "Crime"],
@@ -53,7 +53,7 @@ const movie = {
     ],
 };
 
-const movieUnder = {
+const dummyMovieTwo = {
     id: 1,
     title: "2 The Godfather",
     description:
@@ -68,7 +68,7 @@ const movieUnder = {
         {
             header: "The horse's head was real! ",
             content:
-                "...as were actor John Marley’s screams. A fake horse head was used in rehearsals, but when the cameras were actually rolling, Coppola replaced it with the real thing, much to Marley’s surprise.",
+                "...as were actor John Marley's screams. A fake horse head was used in rehearsals, but when the cameras were actually rolling, Coppola replaced it with the real thing, much to Marley's surprise.",
         },
     ],
     genres: ["Crime", "Drama"],
@@ -103,10 +103,24 @@ const movieUnder = {
 const Home = () => {
     const { user } = useSelector((state) => state.user);
 
+    const [movieOver, setMovieOver] = useState(null);
+    const [movieUnder, setMovieUnder] = useState(null);
+
     const [swipeBlocked, setSwipeBlocked] = useState(false);
     const [buttonsBlocked, setButtonsBlocked] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState(null);
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+
+        setMovieOver(dummyMovieOne);
+        setMovieUnder(dummyMovieTwo);
+
+        setLoading(false);
+    }, []);
 
     const handleSwipeLeft = (movie) => {
         console.log(`Swipe left!`);
@@ -160,6 +174,10 @@ const Home = () => {
         setModalData(null);
     };
 
+    if (loading) {
+        return <Spinner />;
+    }
+
     return (
         <Container>
             <Container>
@@ -167,23 +185,25 @@ const Home = () => {
             </Container>
 
             <Container className="d-flex justify-content-center">
-                <div className="under">
-                    <MovieCard
-                        movie={movieUnder}
-                        buttonsBlocked={buttonsBlocked}
-                        swipeBlocked={swipeBlocked}
-                        onSwipeLeft={handleSwipeLeft}
-                        onSwipeRight={handleSwipeRight}
-                        onLike={handleLike}
-                        onDislike={handleDislike}
-                        onWatchLater={handleWatchLater}
-                        onInfo={handleInfo}
-                    />
-                </div>
+                {movieUnder && (
+                    <div className="under">
+                        <MovieCard
+                            movie={movieUnder}
+                            buttonsBlocked={true}
+                            swipeBlocked={true}
+                            onSwipeLeft={() => {}}
+                            onSwipeRight={() => {}}
+                            onLike={() => {}}
+                            onDislike={() => {}}
+                            onWatchLater={() => {}}
+                            onInfo={() => {}}
+                        />
+                    </div>
+                )}
 
                 <div className="over">
                     <MovieCard
-                        movie={movie}
+                        movie={movieOver}
                         buttonsBlocked={buttonsBlocked}
                         swipeBlocked={swipeBlocked}
                         onSwipeLeft={handleSwipeLeft}
