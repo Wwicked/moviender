@@ -1,0 +1,8 @@
+.over,
+.under {
+    position: absolute;
+}
+
+.under {
+    z-index: 1;
+}
