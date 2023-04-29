@@ -1,8 +1,19 @@
 .movie-card {
     width: 100%;
-    max-width: 600px;
     margin: 0 auto;
     height: 90vh !important;
+}
+
+@media only screen and (max-width: 576px) {
+    .movie-card {
+        width: 380px;
+    }
+}
+
+@media only screen and (min-width: 576px) {
+    .movie-card {
+        width: 580px;
+    }
 }
 
 .movie-card.left {
