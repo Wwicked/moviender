@@ -57,6 +57,19 @@ const InfoModal = ({ show, movie, onClose }) => {
 
                         <hr className="movie-info-divider mx-auto" />
 
+                        {movie?.videoId && (
+                            <div className="yt-video my-4">
+                                <iframe
+                                    width="853"
+                                    height="480"
+                                    src={`https://www.youtube.com/embed/${movie?.videoId}`}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    title="Embedded youtube"
+                                />
+                            </div>
+                        )}
+
                         <Row className="movie-info-row">
                             <div className="movie-info-title">Description:</div>
                             <div className="movie-info-value">{movie?.description}</div>
