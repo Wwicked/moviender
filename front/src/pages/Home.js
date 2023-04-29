@@ -106,12 +106,13 @@ const Home = () => {
     const [movieOver, setMovieOver] = useState(null);
     const [movieUnder, setMovieUnder] = useState(null);
 
-    const [swipeBlocked, setSwipeBlocked] = useState(false);
-    const [buttonsBlocked, setButtonsBlocked] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState(null);
 
     const [loading, setLoading] = useState(true);
+    const [clicked, setClicked] = useState(false);
+
+    const [swipeDirection, setSwipeDirection] = useState(null);
 
     useEffect(() => {
         setLoading(true);
@@ -122,56 +123,56 @@ const Home = () => {
         setLoading(false);
     }, []);
 
-    const handleSwipeLeft = (movie) => {
-        console.log(`Swipe left!`);
-
-        handleDislike(movie);
-    };
-
-    const handleSwipeRight = (movie) => {
-        console.log(`Swipe right!`);
-
-        handleLike(movie);
-    };
-
     const handleLike = (movie) => {
-        setButtonsBlocked(true);
-        setSwipeBlocked(true);
+        if (clicked) return;
+
+        setClicked(true);
 
         UserService.like(user.id, movie.id).then((res) => {
-            setButtonsBlocked(false);
-            setSwipeBlocked(false);
+            setSwipeDirection("right");
+            setClicked(false);
         });
     };
 
     const handleDislike = (movie) => {
-        setButtonsBlocked(true);
-        setSwipeBlocked(true);
+        if (clicked) return;
+
+        setClicked(true);
 
         UserService.dislike(user.id, movie.id).then((res) => {
-            setButtonsBlocked(false);
-            setSwipeBlocked(false);
+            setSwipeDirection("left");
+            setClicked(false);
         });
     };
 
     const handleWatchLater = (movie) => {
-        setButtonsBlocked(true);
+        if (clicked) return;
+
+        setClicked(true);
 
         UserService.watchLater(user.id, movie.id).then((res) => {
-            setButtonsBlocked(false);
+            setSwipeDirection("up");
+            setClicked(false);
         });
     };
 
     const handleInfo = (movie) => {
-        setButtonsBlocked(true);
         setShowModal(true);
         setModalData(movie);
     };
 
     const handleModalClose = () => {
-        setButtonsBlocked(false);
         setShowModal(false);
         setModalData(null);
+    };
+
+    const handleTransitionEnd = () => {
+        if (!["up", "left", "right"].includes(swipeDirection) || clicked) return;
+
+        console.log("!");
+
+        setSwipeDirection(null);
+        setMovieOver(movieUnder);
     };
 
     if (loading) {
@@ -189,10 +190,6 @@ const Home = () => {
                     <div className="under">
                         <MovieCard
                             movie={movieUnder}
-                            buttonsBlocked={true}
-                            swipeBlocked={true}
-                            onSwipeLeft={() => {}}
-                            onSwipeRight={() => {}}
                             onLike={() => {}}
                             onDislike={() => {}}
                             onWatchLater={() => {}}
@@ -201,20 +198,15 @@ const Home = () => {
                     </div>
                 )}
 
-                <div className="over">
+                <div className={`over ${swipeDirection ? swipeDirection : ""}`} onTransitionEnd={handleTransitionEnd}>
                     <MovieCard
                         movie={movieOver}
-                        buttonsBlocked={buttonsBlocked}
-                        swipeBlocked={swipeBlocked}
-                        onSwipeLeft={handleSwipeLeft}
-                        onSwipeRight={handleSwipeRight}
                         onLike={handleLike}
                         onDislike={handleDislike}
                         onWatchLater={handleWatchLater}
                         onInfo={handleInfo}
                     />
                 </div>
-
                 <InfoModal show={showModal} movie={modalData} onClose={handleModalClose} />
             </Container>
         </Container>
