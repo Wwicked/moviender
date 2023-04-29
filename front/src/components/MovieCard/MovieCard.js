@@ -3,7 +3,6 @@ import { Card, Button, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faX, faClock, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import "./MovieCard.css";
-import { useSwipeable } from "react-swipeable";
 
 const ImageIndicator = ({ totalImages, currentIndex }) => {
     const indicators = Array.from({ length: totalImages }, (_, index) => (
@@ -13,70 +12,8 @@ const ImageIndicator = ({ totalImages, currentIndex }) => {
     return <div className="image-indicators">{indicators}</div>;
 };
 
-const MovieCard = ({
-    movie,
-    buttonsBlocked,
-    swipeBlocked,
-    onSwipeLeft,
-    onSwipeRight,
-    onLike,
-    onDislike,
-    onWatchLater,
-    onInfo,
-}) => {
+const MovieCard = ({ movie, onLike, onDislike, onWatchLater, onInfo }) => {
     const [imageIndex, setImageIndex] = useState(0);
-    const [swipeDirection, setSwipeDirection] = useState(null);
-    const [offsetX, setOffsetX] = useState(0);
-    const [dragging, setDragging] = useState(false);
-    const [moveOffscreen, setMoveOffscreen] = useState("");
-
-    const handlers = useSwipeable({
-        onSwipedLeft: () => {
-            if (swipeBlocked) return;
-
-            setSwipeDirection("left");
-            onSwipeLeft(movie);
-
-            setOffsetX(0);
-            setSwipeDirection(null);
-        },
-        onSwipedRight: () => {
-            if (swipeBlocked) return;
-
-            setSwipeDirection("right");
-            onSwipeRight(movie);
-
-            setOffsetX(0);
-            setSwipeDirection(null);
-        },
-        onSwiping: ({ deltaX }) => {
-            if (swipeBlocked) return;
-
-            setOffsetX(deltaX);
-        },
-        onSwiped: () => {
-            if (swipeDirection === "left" || swipeDirection === "right") {
-                setDragging(false);
-            }
-            setSwipeDirection(null);
-            setOffsetX(0);
-        },
-        preventDefaultTouchmoveEvent: false,
-        trackMouse: true,
-        delta: 80,
-    });
-
-    const handleMouseDown = () => setDragging(true);
-    const handleMouseUp = () => setDragging(false);
-    const handleTouchStart = () => setDragging(true);
-    const handleTouchEnd = () => setDragging(false);
-
-    const handleSwiped = () => {
-        if (swipeDirection === "left" || swipeDirection === "right") {
-            return;
-        }
-        setSwipeDirection(null);
-    };
 
     const handleLeftClick = () => {
         setImageIndex(imageIndex - 1 < 0 ? 0 : imageIndex - 1);
@@ -86,28 +23,9 @@ const MovieCard = ({
         setImageIndex(imageIndex === movie.images.length - 1 ? imageIndex : imageIndex + 1);
     };
 
-    const cardStyle = !moveOffscreen
-        ? {
-              transform: `translate(${
-                  swipeDirection === "left" ? "-100%" : swipeDirection === "right" ? "100%" : `${offsetX}px`
-              })`,
-              transition: dragging ? "none" : "transform 0.3s ease-in-out",
-              cursor: dragging ? "grabbing" : "grab",
-          }
-        : {};
-
     return (
         <Col xs={12} md={9} lg={8} xl={8}>
-            <Card
-                {...handlers}
-                className={`movie-card ${moveOffscreen && `movie-card-move-${moveOffscreen}`}`}
-                style={cardStyle}
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                onTransitionEnd={handleSwiped}
-            >
+            <Card className={`movie-card`}>
                 <ImageIndicator totalImages={movie.images.length} currentIndex={imageIndex} />
                 <div className="image-wrapper">
                     <div className="image-overlay left" onClick={handleLeftClick}></div>
@@ -124,13 +42,7 @@ const MovieCard = ({
                         <Button
                             className="dislike shadow"
                             onClick={() => {
-                                if (!buttonsBlocked) return;
-
-                                console.log("Dislike...");
                                 onDislike(movie);
-
-                                setMoveOffscreen("left");
-                                console.log("Left");
                             }}
                             variant="outline-danger"
                         >
@@ -140,10 +52,7 @@ const MovieCard = ({
                         <Button
                             className="watch-later shadow"
                             onClick={() => {
-                                if (!buttonsBlocked) return;
-
                                 onWatchLater(movie);
-                                setMoveOffscreen("up");
                             }}
                             variant="outline-primary"
                         >
@@ -153,8 +62,6 @@ const MovieCard = ({
                         <Button
                             className="info"
                             onClick={() => {
-                                if (!buttonsBlocked) return;
-
                                 onInfo(movie);
                             }}
                             variant="outline-primary shadow"
@@ -165,11 +72,7 @@ const MovieCard = ({
                         <Button
                             className="like shadow"
                             onClick={() => {
-                                if (!buttonsBlocked) return;
-
                                 onLike(movie);
-
-                                setMoveOffscreen("right");
                             }}
                             variant="outline-success"
                         >

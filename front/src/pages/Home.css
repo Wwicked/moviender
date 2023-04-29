@@ -6,3 +6,25 @@
 .under {
     z-index: 1;
 }
+
+.over {
+    z-index: 9999;
+}
+
+.over.left {
+    transform: translateX(-100%) rotate(-15deg);
+    opacity: 0;
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.over.right {
+    transform: translateX(100%) rotate(15deg);
+    opacity: 0;
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.over.up {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 0;
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+}

@@ -5,17 +5,17 @@
     height: 90vh !important;
 }
 
-.movie-card-move-left {
+.movie-card.left {
     transform: translateX(-150%) rotate(-15deg);
     transition: transform 0.4s ease-in-out;
 }
 
-.movie-card-move-right {
+.movie-card.right {
     transform: translateX(150%) rotate(15deg);
     transition: transform 0.4s ease-in-out;
 }
 
-.movie-card-move-up {
+.movie-card.up {
     transform: translateY(-150%) rotate(0deg);
     transition: transform 0.4s ease-in-out;
 }
