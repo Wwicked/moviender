@@ -10,6 +10,7 @@ from flask_jwt_extended import (
 )
 from models import Config, User, db
 from passlib.hash import pbkdf2_sha256
+from time import time
 
 auth_blueprint = Blueprint("auth", __name__)
 
@@ -51,6 +52,7 @@ def register():
         token=str(uuid4()),
         username=username,
         password=pbkdf2_sha256.encrypt(password),
+        joined=int(time()),
         is_admin=is_first_user,
     )
 
