@@ -20,6 +20,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
+    is_admin = db.Column(db.Boolean())
     token = db.Column(db.String(Config.MAX_USER_TOKEN), unique=True)
     username = db.Column(db.String(Config.MAX_USER_NAME))
     password = db.Column(db.String(Config.MAX_USER_PASSWORD))
