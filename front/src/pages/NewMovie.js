@@ -49,7 +49,10 @@ const NewMovie = () => {
         release: 0,
         duration: 0,
         video_id: "",
-        images: [],
+        images: [
+            "https://www.themoviedb.org/t/p/w1280/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg",
+            "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
+        ],
         genres: [],
         cast: [],
         fun_facts: [],
@@ -97,8 +100,8 @@ const NewMovie = () => {
     return (
         <Container className="my-5">
             <Row>
-                <Col>
-                    <Container className="preview">
+                <Col md={12} lg={12} xl={6} className="order-0">
+                    <Container className="preview d-flex justify-content-center">
                         <MovieCard
                             movie={movie}
                             onLike={() => {}}
@@ -121,7 +124,7 @@ const NewMovie = () => {
                     </Container>
                 </Col>
 
-                <Col>
+                <Col md={12} lg={12} xl={6} className="order-1">
                     <Container className="movie-data">
                         <Form onSubmit={handleSubmit(submitForm)} className="my-5">
                             <Row className="gap-4">
