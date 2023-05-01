@@ -12,6 +12,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-bootstrap/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import UserService from "../services/user.service";
+import { SET_USER } from "../reducers/types";
+import { useDispatch } from "react-redux";
+import { updateAuthCookiesAndHeader } from "../services/api";
 
 const MIN_NAME = 2;
 const MAX_NAME = 25;
@@ -42,6 +46,7 @@ const Register = () => {
     const [registerErrorMessage, setRegisterErrorMessage] = useState("");
     const [cookies, setCookie] = useCookies(["user"]);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const {
         register,
@@ -63,10 +68,22 @@ const Register = () => {
             .then((res) => {
                 setCookie("access_token", res?.data?.access_token);
                 setCookie("refresh_token", res?.data?.refresh_token);
+                updateAuthCookiesAndHeader(res?.data?.access_token, res?.data?.refresh_token);
 
-                setLoading(false);
+                UserService.read()
+                    .then((res) => {
+                        dispatch({
+                            type: SET_USER,
+                            payload: res.data,
+                        });
 
-                navigate("/");
+                        setLoading(false);
+                        navigate("/");
+                    })
+                    .catch((err) => {
+                        setLoading(false);
+                        navigate("/login");
+                    });
             })
             .catch((err) => {
                 setRegisterError(true);
