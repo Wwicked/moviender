@@ -11,13 +11,13 @@ const dummyMovieOne = {
     title: "The Godfather",
     description:
         "Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger. Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger. Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger.",
-    year: 1972,
+    release: 1972,
     duration: 175,
     images: [
         "https://www.themoviedb.org/t/p/w1280/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg",
         "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
     ],
-    funFacts: [
+    fun_facts: [
         {
             header: "The horse's head was real! ",
             content:
@@ -58,13 +58,13 @@ const dummyMovieTwo = {
     title: "2 The Godfather",
     description:
         "Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger.",
-    year: 2001,
+    release: 2001,
     duration: 192,
     images: [
         "https://www.themoviedb.org/t/p/w1280/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg",
         "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
     ],
-    funFacts: [
+    fun_facts: [
         {
             header: "The horse's head was real! ",
             content:
@@ -98,7 +98,7 @@ const dummyMovieTwo = {
             movie: "Fredo Corleone",
         },
     ],
-    videoId: "UaVTIH8mujA",
+    video_id: "UaVTIH8mujA",
 };
 
 const Home = () => {

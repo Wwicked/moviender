@@ -26,16 +26,18 @@ const MovieCard = ({ movie, onLike, onDislike, onWatchLater, onInfo }) => {
     return (
         <Col col={12}>
             <Card className={`movie-card`}>
-                <ImageIndicator totalImages={movie.images.length} currentIndex={imageIndex} />
+                <ImageIndicator totalImages={movie?.images?.length} currentIndex={imageIndex} />
+
                 <div className="image-wrapper">
                     <div className="image-overlay left" onClick={handleLeftClick}></div>
                     <div className="image-overlay right" onClick={handleRightClick}></div>
-                    <Card.Img variant="top" src={movie.images[imageIndex]} />
+                    <Card.Img variant="top" src={movie?.images[imageIndex]} />
                 </div>
+
                 <Card.Body>
                     <Card.Title className="title">{movie.title}</Card.Title>
                     <Card.Subtitle className="release">
-                        {movie.year} &bull; {movie.genres.join(", ")}
+                        {movie.release} &bull; {movie.genres.join(", ")}
                     </Card.Subtitle>
 
                     <div className="button-group">

@@ -42,7 +42,7 @@ const App = () => {
     useEffect(() => {
         setLoading(true);
 
-        if (!cookies?.access_token) {
+        if (!cookies?.access_token || user) {
             setLoading(false);
             return;
         }
@@ -82,9 +82,8 @@ const App = () => {
             <Route element={<ProtectedRoute />}>
                 <Route exact path="/" element={<Home />} />
 
-                <Route element={<AdminRoute />}>
-                    <Route exact path="/admin/new" element={<NewMovie />} />
-                </Route>
+                <Route exact path="/admin/new" element={<NewMovie />} />
+                <Route element={<AdminRoute />}></Route>
             </Route>
 
             <Route exact path="/login" element={<Login />} />

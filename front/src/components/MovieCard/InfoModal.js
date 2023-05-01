@@ -51,13 +51,13 @@ const InfoModal = ({ show, movie, onClose }) => {
                                 <div className="movie-info-headers-icon">
                                     {<FontAwesomeIcon icon={faCalendar} size="xl" />}
                                 </div>
-                                <div className="movie-info-headers-value">{movie?.year}</div>
+                                <div className="movie-info-headers-value">{movie?.release}</div>
                             </Col>
                         </Row>
 
                         <hr className="movie-info-divider mx-auto" />
 
-                        {movie?.videoId && (
+                        {movie?.video_id && (
                             <div className="yt-video my-4">
                                 <iframe
                                     width="853"
@@ -75,12 +75,12 @@ const InfoModal = ({ show, movie, onClose }) => {
                             <div className="movie-info-value">{movie?.description}</div>
                         </Row>
 
-                        {movie?.funFacts?.length > 0 && (
+                        {movie?.fun_facts?.length > 0 && (
                             <Row className="movie-info-row">
                                 <div className="movie-info-title">Fun facts:</div>
                                 <div className="movie-info-value">
                                     <ul>
-                                        {movie?.funFacts?.map((fact) => {
+                                        {movie?.fun_facts?.map((fact) => {
                                             return (
                                                 <li key={fact?.header}>
                                                     <strong>{fact?.header}</strong>
@@ -93,16 +93,18 @@ const InfoModal = ({ show, movie, onClose }) => {
                             </Row>
                         )}
 
-                        <Row className="movie-info-row">
-                            <div className="movie-info-title">Cast:</div>
-                            <div className="movie-info-value">
-                                <ul>
-                                    {movie?.cast?.map((c) => {
-                                        return <li key={c.real}>{`${c.movie} (${c.real})`}</li>;
-                                    })}
-                                </ul>
-                            </div>
-                        </Row>
+                        {movie?.cast?.length > 0 && (
+                            <Row className="movie-info-row">
+                                <div className="movie-info-title">Cast:</div>
+                                <div className="movie-info-value">
+                                    <ul>
+                                        {movie?.cast?.map((c) => {
+                                            return <li key={c.real}>{`${c.movie} (${c.real})`}</li>;
+                                        })}
+                                    </ul>
+                                </div>
+                            </Row>
+                        )}
                     </Col>
                 </Container>
             </Modal.Body>
