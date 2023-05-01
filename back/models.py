@@ -10,6 +10,7 @@ class Config:
 
     MAX_MOVIE_TITLE = 100
     MAX_MOVIE_DESCRIPTION = 500
+    MAX_MOVIE_VIDEO_ID = 50
 
     MAX_GENRE_NAME = 30
 
@@ -32,8 +33,8 @@ class User(Base):
     id = db.Column(db.Integer, primary_key=True)
     is_admin = db.Column(db.Boolean())
     token = db.Column(db.String(Config.MAX_USER_TOKEN), unique=True)
-    username = db.Column(db.String(Config.MAX_USER_NAME))
-    password = db.Column(db.String(Config.MAX_USER_PASSWORD))
+    username = db.Column(db.String(Config.MAX_USER_NAME), nullable=False, unique=True)
+    password = db.Column(db.String(Config.MAX_USER_PASSWORD), nullable=False)
     joined = db.Column(db.Integer, nullable=False)
 
 
@@ -41,11 +42,12 @@ class Movie(Base):
     __tablename__ = "movies"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(Config.MAX_MOVIE_TITLE))
-    description = db.Column(db.String(Config.MAX_MOVIE_DESCRIPTION))
+    title = db.Column(db.String(Config.MAX_MOVIE_TITLE), nullable=False)
+    description = db.Column(db.String(Config.MAX_MOVIE_DESCRIPTION), nullable=False)
     release = db.Column(db.Integer, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     added = db.Column(db.Integer, nullable=False)
+    video_id = db.Column(db.String(Config.MAX_MOVIE_VIDEO_ID), nullable=True)
 
     genres = db.relationship("Genre", secondary="movie_genre", back_populates="movies")
     cast = db.relationship("CastMember", back_populates="movie")
@@ -67,7 +69,7 @@ class CastMember(Base):
     id = db.Column(db.Integer, primary_key=True)
     real_name = db.Column(db.String(Config.MAX_CAST_NAME), nullable=False)
     character_name = db.Column(db.String(Config.MAX_CAST_NAME), nullable=False)
-    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"))
+    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)
 
     movie = db.relationship("Movie", back_populates="cast")
 
@@ -78,7 +80,7 @@ class FunFact(Base):
     id = db.Column(db.Integer, primary_key=True)
     header = db.Column(db.String(Config.MAX_FUN_FACT_HEADER), nullable=False)
     content = db.Column(db.String(Config.MAX_FUN_FACT_CONTENT), nullable=False)
-    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"))
+    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)
 
     movie = db.relationship("Movie", back_populates="fun_facts")
 
