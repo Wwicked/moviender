@@ -1,16 +1,16 @@
+import React, { useEffect, useState } from "react";
+import Container from "react-bootstrap/Container";
+import Spinner from "react-bootstrap/Spinner";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
+import NewMovie from "./pages/NewMovie";
 import PageNotFound from "./pages/PageNotFound";
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import Register from "./pages/Register";
 import { SET_USER } from "./reducers/types";
 import UserService from "./services/user.service";
-import Spinner from "react-bootstrap/Spinner";
-import Container from "react-bootstrap/Container";
 
 const ProtectedRoute = ({ redirectPath = "/login" }) => {
     const [cookies] = useCookies(["user"]);
@@ -22,16 +22,27 @@ const ProtectedRoute = ({ redirectPath = "/login" }) => {
     return <Outlet />;
 };
 
+const AdminRoute = ({ redirectPath = "/" }) => {
+    const { user } = useSelector((state) => state.user);
+
+    if (!user?.is_admin) {
+        return <Navigate to={redirectPath} replace />;
+    }
+
+    return <Outlet />;
+};
+
 const App = () => {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [cookies] = useCookies(["user"]);
 
     useEffect(() => {
         setLoading(true);
 
-        if (user || !cookies?.access_token) {
+        if (!cookies?.access_token) {
             setLoading(false);
             return;
         }
@@ -47,8 +58,9 @@ const App = () => {
             })
             .catch((err) => {
                 setLoading(false);
+                navigate("/login");
             });
-    }, [dispatch, user, cookies?.access_token]);
+    }, [dispatch, cookies?.access_token, navigate, user]);
 
     if (loading) {
         return (
@@ -67,13 +79,16 @@ const App = () => {
 
     return (
         <Routes>
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
-
             <Route element={<ProtectedRoute />}>
                 <Route exact path="/" element={<Home />} />
+
+                <Route element={<AdminRoute />}>
+                    <Route exact path="/admin/new" element={<NewMovie />} />
+                </Route>
             </Route>
 
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>
     );
