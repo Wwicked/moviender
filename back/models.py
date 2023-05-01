@@ -49,7 +49,7 @@ class Movie(Base):
 
     genres = db.relationship("Genre", secondary="movie_genre", back_populates="movies")
     cast = db.relationship("CastMember", back_populates="movie")
-    fun_facts = db.relationship("FunFact", secondary="fun_facts", back_populates="fact")
+    fun_facts = db.relationship("FunFact", back_populates="movie")
 
 
 class Genre(Base):
@@ -78,9 +78,9 @@ class FunFact(Base):
     id = db.Column(db.Integer, primary_key=True)
     header = db.Column(db.String(Config.MAX_FUN_FACT_HEADER), nullable=False)
     content = db.Column(db.String(Config.MAX_FUN_FACT_CONTENT), nullable=False)
-    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"))
 
-    movie = db.relationship("Movie", backref=db.backref("fun_facts", lazy=True))
+    movie = db.relationship("Movie", back_populates="fun_facts")
 
 
 movie_genre = db.Table(
