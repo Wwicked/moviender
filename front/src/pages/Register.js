@@ -44,7 +44,7 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [registerError, setRegisterError] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState("");
-    const [cookies, setCookie] = useCookies(["user"]);
+    const [, setCookie] = useCookies(["user"]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -66,8 +66,8 @@ const Register = () => {
 
         AuthService.register(data.username, data.password)
             .then((res) => {
-                setCookie("access_token", res?.data?.access_token);
-                setCookie("refresh_token", res?.data?.refresh_token);
+                setCookie("access_token", res?.data?.access_token, { path: "/" });
+                setCookie("refresh_token", res?.data?.refresh_token, { path: "/" });
                 updateAuthCookiesAndHeader(res?.data?.access_token, res?.data?.refresh_token);
 
                 UserService.read()
