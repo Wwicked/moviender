@@ -1,7 +1,8 @@
 # Todo
 
 -   Admin routes don't work on front side
--   /admin/new needs: cast list, fun facts. Also need to check if the data gets validated after clicking the button
+-   /admin/new needs: Also need to check if the data gets validated after clicking the button
+-   Actually send some requests when adding a new movie/genre
 
 -   Header
 -   Footer
