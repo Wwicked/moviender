@@ -193,15 +193,15 @@ const CastList = ({ onCastChange }) => {
                 ))}
             </ListGroup>
 
-            <Modal show={showModal} onHide={handleCloseModal} size="lg">
+            <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>New character</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
                     <Container>
-                        <Row className="my-3">
-                            <Col xs={5} sm={5} md={5} lg={5}>
+                        <Row className="my-3 gap-3">
+                            <Row>
                                 <Form.Control
                                     type="text"
                                     placeholder="Character's name"
@@ -210,9 +210,9 @@ const CastList = ({ onCastChange }) => {
                                         setCharacterName(event.target.value);
                                     }}
                                 />
-                            </Col>
+                            </Row>
 
-                            <Col xs={5} sm={5} md={5} lg={5}>
+                            <Row>
                                 <Form.Control
                                     type="text"
                                     placeholder="Actor's name"
@@ -221,7 +221,7 @@ const CastList = ({ onCastChange }) => {
                                         setActorName(event.target.value);
                                     }}
                                 />
-                            </Col>
+                            </Row>
                         </Row>
                     </Container>
                 </Modal.Body>
@@ -381,7 +381,7 @@ const NewGenreModal = ({ show, onClose, onNewGenre }) => {
     };
 
     return (
-        <Modal show={show} onHide={onClose} size="lg">
+        <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>
                 <Modal.Title>New genre</Modal.Title>
             </Modal.Header>
@@ -523,6 +523,7 @@ const NewMovie = () => {
                                             {...register("release")}
                                             type="number"
                                             name="release"
+                                            defaultValue=""
                                             onChange={handleChange}
                                             className={errors?.release?.message && "is-invalid"}
                                         />
