@@ -170,8 +170,6 @@ const Home = () => {
     const handleTransitionEnd = () => {
         if (!["up", "left", "right"].includes(swipeDirection) || clicked) return;
 
-        console.log("!");
-
         setSwipeDirection(null);
         setMovieOver(movieUnder);
     };
