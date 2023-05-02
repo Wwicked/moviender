@@ -15,6 +15,7 @@ import { updateAuthCookiesAndHeader } from "../services/api";
 import UserService from "../services/user.service";
 import { useDispatch } from "react-redux";
 import { SET_USER } from "../reducers/types";
+import { useCookies } from "react-cookie";
 
 const MIN_NAME = 2;
 const MAX_NAME = 25;
@@ -42,6 +43,7 @@ const Loginnew = () => {
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
+    const [cookies, setCookie] = useCookies(["user"]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -65,16 +67,23 @@ const Loginnew = () => {
                 const at = res?.data?.access_token;
                 const rt = res?.data?.refresh_token;
 
+                setCookie("access_token", at);
+                setCookie("refresh_token", rt);
                 updateAuthCookiesAndHeader(at, rt);
 
-                UserService.read().then((res) => {
-                    dispatch({
-                        type: SET_USER,
-                        payload: res.data,
-                    });
-                });
+                UserService.read()
+                    .then((res) => {
+                        dispatch({
+                            type: SET_USER,
+                            payload: res.data,
+                        });
 
-                setLoading(false);
+                        setLoading(false);
+                    })
+                    .catch((err) => {
+                        setLoading(false);
+                    });
+
                 navigate("/");
             })
             .catch((err) => {
