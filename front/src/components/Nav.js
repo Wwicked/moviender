@@ -4,15 +4,13 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { removeAuthCookiesAndHeader } from "../services/api";
 
 const NavLoggedIn = () => {
     const { user } = useSelector((state) => state.user);
-    const [, , removeCookie] = useCookies(["user"]);
 
     const onLogOut = () => {
-        removeCookie("access_token", { path: "/" });
-        removeCookie("refresh_token", { path: "/" });
+        removeAuthCookiesAndHeader();
     };
 
     return (

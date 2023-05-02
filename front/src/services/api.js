@@ -12,10 +12,17 @@ if (token) {
 }
 
 const updateAuthCookiesAndHeader = (access_token, refresh_token) => {
-    Cookies.set("access_token", access_token);
-    Cookies.set("refresh_token", refresh_token);
+    Cookies.set("access_token", access_token, { path: "/" });
+    Cookies.set("refresh_token", refresh_token, { path: "/" });
 
     api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
 };
 
-export { api, updateAuthCookiesAndHeader };
+const removeAuthCookiesAndHeader = () => {
+    Cookies.remove("access_token", { path: "/" });
+    Cookies.remove("refresh_token", { path: "/" });
+
+    api.defaults.headers.common["Authorization"] = "";
+};
+
+export { api, updateAuthCookiesAndHeader, removeAuthCookiesAndHeader };

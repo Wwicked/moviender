@@ -11,7 +11,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-bootstrap/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import UserService from "../services/user.service";
 import { SET_USER } from "../reducers/types";
 import { useDispatch } from "react-redux";
@@ -44,7 +43,6 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [registerError, setRegisterError] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState("");
-    const [, setCookie] = useCookies(["user"]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -66,8 +64,6 @@ const Register = () => {
 
         AuthService.register(data.username, data.password)
             .then((res) => {
-                setCookie("access_token", res?.data?.access_token, { path: "/" });
-                setCookie("refresh_token", res?.data?.refresh_token, { path: "/" });
                 updateAuthCookiesAndHeader(res?.data?.access_token, res?.data?.refresh_token);
 
                 UserService.read()
