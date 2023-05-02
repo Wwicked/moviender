@@ -95,7 +95,7 @@ const InfoModal = ({ show, movie, onClose }) => {
 
                         {movie?.cast?.length > 0 && (
                             <Row className="movie-info-row">
-                                <div className="movie-info-title">Cast:</div>
+                                <div className="movie-info-title">Characters:</div>
                                 <div className="movie-info-value">
                                     <ul>
                                         {movie?.cast?.map((c) => {

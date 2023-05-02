@@ -11,6 +11,8 @@ import * as yup from "yup";
 import InfoModal from "../components/MovieCard/InfoModal";
 import MovieCard from "../components/MovieCard/MovieCard";
 import "./NewMovie.css";
+import { ListGroup } from "react-bootstrap";
+import ListGroupItem from "react-bootstrap/ListGroupItem";
 
 const ErrorFeedback = ({ error }) => {
     return error ? <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback> : <></>;
@@ -82,6 +84,104 @@ const ImageSelector = ({ onSelectedFilesChange }) => {
                         </div>
                     </Col>
                 ))}
+            </Row>
+        </Form.Group>
+    );
+};
+
+const CastList = ({ onCastChange }) => {
+    const [actorName, setActorName] = useState("");
+    const [characterName, setCharacterName] = useState("");
+    const [castList, setCastList] = useState([]);
+
+    const handleAdd = () => {
+        if (actorName === "" || characterName === "") return;
+
+        setCastList([...castList, { real: actorName, movie: characterName }]);
+        onCastChange([...castList, { real: actorName, movie: characterName }]);
+        setActorName("");
+        setCharacterName("");
+    };
+
+    const handleRemove = (index) => {
+        setCastList(castList.filter((_, i) => i !== index));
+        onCastChange(castList.filter((_, i) => i !== index));
+    };
+
+    const handleDragStart = (event, index) => {
+        event.dataTransfer.setData("text/plain", index);
+        event.dataTransfer.effectAllowed = "move";
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    };
+
+    const handleDrop = (event, index) => {
+        event.preventDefault();
+        const dragIndex = Number(event.dataTransfer.getData("text/plain"));
+        const item = castList[dragIndex];
+        const newCastList = castList.filter((_, i) => i !== dragIndex);
+        newCastList.splice(index, 0, item);
+        setCastList(newCastList);
+        onCastChange(newCastList);
+    };
+
+    return (
+        <Form.Group>
+            <Form.Label>Characters</Form.Label>
+            <ListGroup>
+                {castList.map((cast, index) => (
+                    <ListGroupItem
+                        key={index}
+                        className="d-flex justify-content-between"
+                        draggable
+                        onDragStart={(event) => handleDragStart(event, index)}
+                        onDragOver={handleDragOver}
+                        onDrop={(event) => handleDrop(event, index)}
+                    >
+                        <span>
+                            {cast.movie} ({cast.real})
+                        </span>
+                        <Button variant="danger" onClick={() => handleRemove(index)} className="ms-auto mx-2" size="sm">
+                            &times;
+                        </Button>
+                        <Button variant="secondary" size="sm">
+                            &#x2195;
+                        </Button>
+                    </ListGroupItem>
+                ))}
+            </ListGroup>
+
+            <Row className="my-3">
+                <Col xs={5} sm={5} md={5} lg={5}>
+                    <Form.Control
+                        type="text"
+                        placeholder="Character's name"
+                        value={characterName}
+                        onChange={(event) => {
+                            setCharacterName(event.target.value);
+                        }}
+                    />
+                </Col>
+
+                <Col xs={5} sm={5} md={5} lg={5}>
+                    <Form.Control
+                        type="text"
+                        placeholder="Actor's name"
+                        value={actorName}
+                        onChange={(event) => {
+                            setActorName(event.target.value);
+                        }}
+                    />
+                </Col>
+
+                <Col xs={2} sm={2} md={2} lg={2}>
+                    <Button variant="primary" onClick={handleAdd}>
+                        Add
+                    </Button>
+                </Col>
             </Row>
         </Form.Group>
     );
@@ -279,6 +379,15 @@ const NewMovie = () => {
                                         setMovie((prev) => ({
                                             ...prev,
                                             images: urlObjects,
+                                        }));
+                                    }}
+                                />
+
+                                <CastList
+                                    onCastChange={(newCast) => {
+                                        setMovie((prev) => ({
+                                            ...prev,
+                                            cast: newCast,
                                         }));
                                     }}
                                 />
