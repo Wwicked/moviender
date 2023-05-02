@@ -1,7 +1,7 @@
 # Todo
 
 -   Admin routes don't work on front side
--   /admin/new needs: cast list, pictures, fun facts and mobile responsiveness. Also need to check if the data gets validated after clicking the button
+-   /admin/new needs: cast list, pictures, fun facts. Also need to check if the data gets validated after clicking the button
 
 -   Header
 -   Footer

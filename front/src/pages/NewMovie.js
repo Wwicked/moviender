@@ -10,9 +10,81 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import InfoModal from "../components/MovieCard/InfoModal";
 import MovieCard from "../components/MovieCard/MovieCard";
+import "./NewMovie.css";
 
 const ErrorFeedback = ({ error }) => {
     return error ? <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback> : <></>;
+};
+
+const MoviePreview = ({ movie }) => {
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState(null);
+
+    return (
+        <Container className="preview d-flex justify-content-center">
+            <MovieCard
+                movie={movie}
+                onLike={() => {}}
+                onDislike={() => {}}
+                onWatchLater={() => {}}
+                onInfo={() => {
+                    setShowModal(true);
+                    setModalData(movie);
+                }}
+            />
+
+            <InfoModal
+                show={showModal}
+                movie={modalData}
+                onClose={() => {
+                    setShowModal(false);
+                    setModalData(null);
+                }}
+            />
+        </Container>
+    );
+};
+
+const ImageSelector = ({ onSelectedFilesChange }) => {
+    const [selectedFiles, setSelectedFiles] = useState([]);
+
+    const handleFileSelect = (event) => {
+        const files = Array.from(event.target.files);
+        setSelectedFiles((prevSelectedFiles) => [...prevSelectedFiles, ...files]);
+        onSelectedFilesChange([...selectedFiles, ...files]);
+    };
+
+    const handleFileRemove = (index) => {
+        setSelectedFiles((prevSelectedFiles) => prevSelectedFiles.filter((file, i) => i !== index));
+        onSelectedFilesChange(selectedFiles.filter((file, i) => i !== index));
+    };
+
+    return (
+        <Form.Group>
+            <Form.Label>Choose Images</Form.Label>
+            <Form.Control type="file" multiple accept="image/*" onChange={handleFileSelect} />
+            <Row className="mt-3">
+                {selectedFiles.map((file, index) => (
+                    <Col key={index} xs={6} sm={4} md={3} lg={3}>
+                        <div className="position-relative">
+                            <img
+                                src={URL.createObjectURL(file)}
+                                alt="failed to load"
+                                className="image-preview rounded"
+                            />
+                            <button
+                                type="button"
+                                className="btn btn-danger position-absolute top-0 end-0"
+                                onClick={() => handleFileRemove(index)}
+                            >
+                                &times;
+                            </button>
+                        </div>
+                    </Col>
+                ))}
+            </Row>
+        </Form.Group>
+    );
 };
 
 const NewMovie = () => {
@@ -67,8 +139,6 @@ const NewMovie = () => {
         resolver: yupResolver(schema),
     });
 
-    const [showModal, setShowModal] = useState(false);
-    const [modalData, setModalData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [adding, setAdding] = useState(false);
     const [allGenres, setAllGenres] = useState([]);
@@ -101,32 +171,12 @@ const NewMovie = () => {
         <Container className="my-5">
             <Row>
                 <Col md={12} lg={12} xl={6} className="order-0">
-                    <Container className="preview d-flex justify-content-center">
-                        <MovieCard
-                            movie={movie}
-                            onLike={() => {}}
-                            onDislike={() => {}}
-                            onWatchLater={() => {}}
-                            onInfo={() => {
-                                setShowModal(true);
-                                setModalData(movie);
-                            }}
-                        />
-
-                        <InfoModal
-                            show={showModal}
-                            movie={modalData}
-                            onClose={() => {
-                                setShowModal(false);
-                                setModalData(null);
-                            }}
-                        />
-                    </Container>
+                    <MoviePreview movie={movie} />
                 </Col>
 
                 <Col md={12} lg={12} xl={6} className="order-1">
                     <Container className="movie-data">
-                        <Form onSubmit={handleSubmit(submitForm)} className="my-5">
+                        <Form onSubmit={handleSubmit(submitForm)}>
                             <Row className="gap-4">
                                 <Form.Group controlId="title">
                                     <Form.Label>Title</Form.Label>
@@ -217,6 +267,21 @@ const NewMovie = () => {
                                         <Form.Text className="text-danger">{errors?.genres?.message}</Form.Text>
                                     )}
                                 </Form.Group>
+
+                                <ImageSelector
+                                    onSelectedFilesChange={(files) => {
+                                        const urlObjects = [];
+
+                                        files.forEach((file) => {
+                                            urlObjects.push(URL.createObjectURL(file));
+                                        });
+
+                                        setMovie((prev) => ({
+                                            ...prev,
+                                            images: urlObjects,
+                                        }));
+                                    }}
+                                />
 
                                 <Button variant="primary" type="submit" className="mt-5" disabled={adding}>
                                     {adding ? "Adding..." : "Add Movie"}
