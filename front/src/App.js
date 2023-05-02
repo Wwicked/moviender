@@ -14,9 +14,9 @@ import UserService from "./services/user.service";
 import CustomNav from "./components/Nav";
 
 const ProtectedRoute = ({ redirectPath = "/login" }) => {
-    const [cookies] = useCookies(["user"]);
+    const { user } = useSelector((state) => state.user);
 
-    if (!cookies?.access_token) {
+    if (!user) {
         return <Navigate to={redirectPath} replace />;
     }
 
