@@ -13,6 +13,7 @@ import MovieCard from "../components/MovieCard/MovieCard";
 import "./NewMovie.css";
 import { ListGroup } from "react-bootstrap";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
+import Modal from "react-bootstrap/Modal";
 
 const ErrorFeedback = ({ error }) => {
     return error ? <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback> : <></>;
@@ -61,26 +62,54 @@ const ImageSelector = ({ onSelectedFilesChange }) => {
         onSelectedFilesChange(selectedFiles.filter((file, i) => i !== index));
     };
 
+    const handleDragStart = (event, index) => {
+        event.dataTransfer.setData("text/plain", index);
+        event.dataTransfer.dropEffect = "move";
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    };
+
+    const handleDrop = (event, dropIndex) => {
+        event.preventDefault();
+        const dragIndex = event.dataTransfer.getData("text/plain");
+        if (dragIndex === dropIndex) return;
+        const newSelectedFiles = [...selectedFiles];
+        const [draggedFile] = newSelectedFiles.splice(dragIndex, 1);
+        newSelectedFiles.splice(dropIndex, 0, draggedFile);
+        setSelectedFiles(newSelectedFiles);
+        onSelectedFilesChange(newSelectedFiles);
+    };
+
     return (
         <Form.Group>
             <Form.Label>Choose Images</Form.Label>
             <Form.Control type="file" multiple accept="image/*" onChange={handleFileSelect} />
             <Row className="mt-3">
                 {selectedFiles.map((file, index) => (
-                    <Col key={index} xs={6} sm={4} md={3} lg={3}>
-                        <div className="position-relative">
+                    <Col key={index} xs={5} sm={3} md={2} lg={2}>
+                        <div
+                            className="position-relative"
+                            onDragOver={handleDragOver}
+                            onDrop={(event) => handleDrop(event, index)}
+                        >
                             <img
                                 src={URL.createObjectURL(file)}
                                 alt="failed to load"
                                 className="image-preview rounded"
+                                draggable
+                                onDragStart={(event) => handleDragStart(event, index)}
                             />
-                            <button
-                                type="button"
-                                className="btn btn-danger position-absolute top-0 end-0"
+                            <Button
+                                variant="danger"
+                                className="position-absolute top-0 end-0"
+                                size="sm"
                                 onClick={() => handleFileRemove(index)}
                             >
                                 &times;
-                            </button>
+                            </Button>
                         </div>
                     </Col>
                 ))}
@@ -93,6 +122,7 @@ const CastList = ({ onCastChange }) => {
     const [actorName, setActorName] = useState("");
     const [characterName, setCharacterName] = useState("");
     const [castList, setCastList] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
     const handleAdd = () => {
         if (actorName === "" || characterName === "") return;
@@ -101,6 +131,7 @@ const CastList = ({ onCastChange }) => {
         onCastChange([...castList, { real: actorName, movie: characterName }]);
         setActorName("");
         setCharacterName("");
+        setShowModal(false);
     };
 
     const handleRemove = (index) => {
@@ -128,9 +159,17 @@ const CastList = ({ onCastChange }) => {
         onCastChange(newCastList);
     };
 
+    const handleOpenModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
+
     return (
         <Form.Group>
-            <Form.Label>Characters</Form.Label>
+            <Form.Label>
+                Characters{" "}
+                <Button size="sm" className="mx-2" onClick={handleOpenModal}>
+                    +
+                </Button>
+            </Form.Label>
             <ListGroup>
                 {castList.map((cast, index) => (
                     <ListGroupItem
@@ -154,36 +193,225 @@ const CastList = ({ onCastChange }) => {
                 ))}
             </ListGroup>
 
-            <Row className="my-3">
-                <Col xs={5} sm={5} md={5} lg={5}>
-                    <Form.Control
-                        type="text"
-                        placeholder="Character's name"
-                        value={characterName}
-                        onChange={(event) => {
-                            setCharacterName(event.target.value);
-                        }}
-                    />
-                </Col>
+            <Modal show={showModal} onHide={handleCloseModal} size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>New character</Modal.Title>
+                </Modal.Header>
 
-                <Col xs={5} sm={5} md={5} lg={5}>
-                    <Form.Control
-                        type="text"
-                        placeholder="Actor's name"
-                        value={actorName}
-                        onChange={(event) => {
-                            setActorName(event.target.value);
-                        }}
-                    />
-                </Col>
+                <Modal.Body>
+                    <Container>
+                        <Row className="my-3">
+                            <Col xs={5} sm={5} md={5} lg={5}>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Character's name"
+                                    value={characterName}
+                                    onChange={(event) => {
+                                        setCharacterName(event.target.value);
+                                    }}
+                                />
+                            </Col>
 
-                <Col xs={2} sm={2} md={2} lg={2}>
+                            <Col xs={5} sm={5} md={5} lg={5}>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Actor's name"
+                                    value={actorName}
+                                    onChange={(event) => {
+                                        setActorName(event.target.value);
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                    </Container>
+                </Modal.Body>
+
+                <Modal.Footer>
                     <Button variant="primary" onClick={handleAdd}>
                         Add
                     </Button>
-                </Col>
-            </Row>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Form.Group>
+    );
+};
+
+const FunFacts = ({ onFactsChange }) => {
+    const [header, setHeader] = useState("");
+    const [content, setContent] = useState("");
+    const [factsList, setFactsList] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleAdd = () => {
+        if (header === "" || content === "") return;
+
+        setFactsList([...factsList, { header: header, content: content }]);
+        onFactsChange([...factsList, { header: header, content: content }]);
+        setHeader("");
+        setContent("");
+        setShowModal(false);
+    };
+
+    const handleRemove = (index) => {
+        setFactsList(factsList.filter((_, i) => i !== index));
+        onFactsChange(factsList.filter((_, i) => i !== index));
+    };
+
+    const handleDragStart = (event, index) => {
+        event.dataTransfer.setData("text/plain", index);
+        event.dataTransfer.effectAllowed = "move";
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    };
+
+    const handleDrop = (event, index) => {
+        event.preventDefault();
+        const dragIndex = Number(event.dataTransfer.getData("text/plain"));
+        const item = factsList[dragIndex];
+        const newFactsList = factsList.filter((_, i) => i !== dragIndex);
+        newFactsList.splice(index, 0, item);
+        setFactsList(newFactsList);
+        onFactsChange(newFactsList);
+    };
+
+    const handleOpenModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
+
+    return (
+        <Form.Group>
+            <Form.Label>
+                Fun facts
+                <Button size="sm" className="mx-2" onClick={handleOpenModal}>
+                    +
+                </Button>
+            </Form.Label>
+            <ListGroup>
+                {factsList.map((fact, index) => (
+                    <ListGroupItem
+                        key={index}
+                        className="d-flex justify-content-between"
+                        draggable
+                        onDragStart={(event) => handleDragStart(event, index)}
+                        onDragOver={handleDragOver}
+                        onDrop={(event) => handleDrop(event, index)}
+                    >
+                        <span>
+                            <strong>{fact.header}</strong> {fact.content}
+                        </span>
+                        <Button variant="danger" onClick={() => handleRemove(index)} className="ms-auto mx-2" size="sm">
+                            &times;
+                        </Button>
+                        <Button variant="secondary" size="sm">
+                            &#x2195;
+                        </Button>
+                    </ListGroupItem>
+                ))}
+            </ListGroup>
+
+            <Modal show={showModal} onHide={handleCloseModal} size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>New Fun Fact</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <Container>
+                        <Row className="my-3 gap-3">
+                            <Row>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Header"
+                                    value={header}
+                                    onChange={(event) => {
+                                        setHeader(event.target.value);
+                                    }}
+                                />
+                            </Row>
+
+                            <Row>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    placeholder="Content"
+                                    value={content}
+                                    onChange={(event) => {
+                                        setContent(event.target.value);
+                                    }}
+                                />
+                            </Row>
+                        </Row>
+                    </Container>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleAdd}>
+                        Add
+                    </Button>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </Form.Group>
+    );
+};
+
+const NewGenreModal = ({ show, onClose, onNewGenre }) => {
+    const [name, setName] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleAdd = () => {
+        setLoading(true);
+
+        // TODO: Send a request to backend to create a new genre
+        const success = true;
+
+        if (success) {
+            onNewGenre(name);
+            setName("");
+            onClose();
+        }
+
+        setLoading(false);
+    };
+
+    return (
+        <Modal show={show} onHide={onClose} size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>New genre</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                <Container>
+                    <Row className="my-3 gap-3">
+                        <Row>
+                            <Form.Control
+                                type="text"
+                                placeholder="Genre name"
+                                value={name}
+                                onChange={(event) => {
+                                    setName(event.target.value);
+                                }}
+                            />
+                        </Row>
+                    </Row>
+                </Container>
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="primary" onClick={handleAdd} disabled={loading}>
+                    Add
+                </Button>
+                <Button variant="secondary" onClick={onClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
 
@@ -221,10 +449,7 @@ const NewMovie = () => {
         release: 0,
         duration: 0,
         video_id: "",
-        images: [
-            "https://www.themoviedb.org/t/p/w1280/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg",
-            "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
-        ],
+        images: [],
         genres: [],
         cast: [],
         fun_facts: [],
@@ -242,6 +467,7 @@ const NewMovie = () => {
     const [loading, setLoading] = useState(true);
     const [adding, setAdding] = useState(false);
     const [allGenres, setAllGenres] = useState([]);
+    const [showNewGenreModal, setShowNewGenreModal] = useState(false);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -346,7 +572,18 @@ const NewMovie = () => {
                                 </Form.Group>
 
                                 <Form.Group controlId="genres">
-                                    <Form.Label>Genres</Form.Label>
+                                    <Form.Label>
+                                        Genres
+                                        <Button
+                                            size="sm"
+                                            className="mx-2"
+                                            onClick={() => {
+                                                setShowNewGenreModal(true);
+                                            }}
+                                        >
+                                            +
+                                        </Button>
+                                    </Form.Label>
                                     <br />
                                     {allGenres.map((genre) => (
                                         <Badge
@@ -366,6 +603,15 @@ const NewMovie = () => {
                                     {errors?.genres?.message && (
                                         <Form.Text className="text-danger">{errors?.genres?.message}</Form.Text>
                                     )}
+                                    <NewGenreModal
+                                        show={showNewGenreModal}
+                                        onClose={() => {
+                                            setShowNewGenreModal(false);
+                                        }}
+                                        onNewGenre={(newGenre) => {
+                                            setAllGenres((prev) => [...prev, newGenre]);
+                                        }}
+                                    />
                                 </Form.Group>
 
                                 <ImageSelector
@@ -391,6 +637,8 @@ const NewMovie = () => {
                                         }));
                                     }}
                                 />
+
+                                <FunFacts onFactsChange={() => {}} />
 
                                 <Button variant="primary" type="submit" className="mt-5" disabled={adding}>
                                     {adding ? "Adding..." : "Add Movie"}
