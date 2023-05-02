@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import { SET_USER } from "./reducers/types";
 import UserService from "./services/user.service";
 import CustomNav from "./components/Nav";
+import TestPage from "./pages/TestPage";
 
 const ProtectedRoute = ({ redirectPath = "/login" }) => {
     const { user } = useSelector((state) => state.user);
@@ -84,6 +85,7 @@ const App = () => {
                     </Route>
                 </Route>
 
+                <Route exact path="/test" element={<TestPage />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/register" element={<Register />} />
                 <Route path="*" element={<PageNotFound />} />
