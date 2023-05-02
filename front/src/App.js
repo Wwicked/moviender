@@ -11,6 +11,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Register from "./pages/Register";
 import { SET_USER } from "./reducers/types";
 import UserService from "./services/user.service";
+import CustomNav from "./components/Nav";
 
 const ProtectedRoute = ({ redirectPath = "/login" }) => {
     const [cookies] = useCookies(["user"]);
@@ -78,18 +79,22 @@ const App = () => {
     }
 
     return (
-        <Routes>
-            <Route element={<ProtectedRoute />}>
-                <Route exact path="/" element={<Home />} />
+        <>
+            <CustomNav />
 
-                <Route exact path="/admin/new" element={<NewMovie />} />
-                <Route element={<AdminRoute />}></Route>
-            </Route>
+            <Routes>
+                <Route element={<ProtectedRoute />}>
+                    <Route exact path="/" element={<Home />} />
 
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
-            <Route path="*" element={<PageNotFound />} />
-        </Routes>
+                    <Route exact path="/admin/new" element={<NewMovie />} />
+                    <Route element={<AdminRoute />}></Route>
+                </Route>
+
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/register" element={<Register />} />
+                <Route path="*" element={<PageNotFound />} />
+            </Routes>
+        </>
     );
 };
 
