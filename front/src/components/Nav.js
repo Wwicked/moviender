@@ -2,15 +2,21 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeAuthCookiesAndHeader } from "../services/api";
+import { SET_USER } from "../reducers/types";
 
 const NavLoggedIn = () => {
     const { user } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     const onLogOut = () => {
         removeAuthCookiesAndHeader();
+        dispatch({
+            type: SET_USER,
+            payload: null,
+        });
     };
 
     return (
