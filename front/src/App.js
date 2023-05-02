@@ -65,14 +65,7 @@ const App = () => {
 
     if (loading) {
         return (
-            <Container
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-                className="my-5"
-            >
+            <Container className="my-5">
                 <Spinner />
             </Container>
         );
