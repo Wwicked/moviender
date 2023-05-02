@@ -37,7 +37,7 @@ const App = () => {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [cookies] = useCookies(["user"]);
 
     useEffect(() => {
@@ -79,8 +79,9 @@ const App = () => {
                 <Route element={<ProtectedRoute />}>
                     <Route exact path="/" element={<Home />} />
 
-                    <Route exact path="/admin/new" element={<NewMovie />} />
-                    <Route element={<AdminRoute />}></Route>
+                    <Route element={<AdminRoute />}>
+                        <Route exact path="/admin/new" element={<NewMovie />} />
+                    </Route>
                 </Route>
 
                 <Route exact path="/login" element={<Login />} />
