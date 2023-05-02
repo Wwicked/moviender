@@ -72,12 +72,12 @@ const Loginnew = () => {
                         });
 
                         setLoading(false);
+                        navigate("/");
                     })
                     .catch((err) => {
                         setLoading(false);
+                        navigate("/");
                     });
-
-                navigate("/");
             })
             .catch((err) => {
                 if (err?.response?.status) {
