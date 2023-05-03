@@ -492,7 +492,7 @@ const NewMovie = () => {
         const old = getFromStorageWithFallback("genres", []);
         const updated = old.includes(value) ? old.filter((g) => g !== value) : [...old, value];
 
-        localStorage.setItem("genres", JSON.stringify(updated));
+        if (updated.length > 0) localStorage.setItem("genres", JSON.stringify(updated));
     };
 
     const handleFactsChange = (facts) => {
