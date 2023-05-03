@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
-import { Container, Spinner } from "react-bootstrap";
+import { Alert, Container, Spinner } from "react-bootstrap";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -14,6 +14,7 @@ import "./NewMovie.css";
 import { ListGroup } from "react-bootstrap";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Modal from "react-bootstrap/Modal";
+import MovieService from "../services/movie.service";
 
 const ErrorFeedback = ({ error }) => {
     return error ? <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback> : <></>;
@@ -466,6 +467,7 @@ const NewMovie = () => {
 
     const [loading, setLoading] = useState(true);
     const [adding, setAdding] = useState(false);
+    const [success, setSuccess] = useState(false);
     const [allGenres, setAllGenres] = useState([]);
     const [showNewGenreModal, setShowNewGenreModal] = useState(false);
 
@@ -485,8 +487,17 @@ const NewMovie = () => {
 
     const submitForm = async (data) => {
         setAdding(true);
-        console.log(`Submitted data: ${data}`);
-        setAdding(false);
+
+        MovieService.newMovie(movie)
+            .then((res) => {
+                setAdding(false);
+                setSuccess(true);
+            })
+            .catch((err) => {
+                setAdding(false);
+                setSuccess(false);
+                console.log(`Error: ${JSON.stringify(err)}`);
+            });
     };
 
     if (loading) {
@@ -495,6 +506,12 @@ const NewMovie = () => {
 
     return (
         <Container className="my-5">
+            {success && (
+                <Row>
+                    <Alert variant="success">Added movie!</Alert>
+                </Row>
+            )}
+
             <Row>
                 <Col md={12} lg={12} xl={6} className="order-0">
                     <MoviePreview movie={movie} />
@@ -639,7 +656,14 @@ const NewMovie = () => {
                                     }}
                                 />
 
-                                <FunFacts onFactsChange={() => {}} />
+                                <FunFacts
+                                    onFactsChange={(facts) => {
+                                        setMovie((prev) => ({
+                                            ...prev,
+                                            fun_facts: facts,
+                                        }));
+                                    }}
+                                />
 
                                 <Button variant="primary" type="submit" className="mt-5" disabled={adding}>
                                     {adding ? "Adding..." : "Add Movie"}
