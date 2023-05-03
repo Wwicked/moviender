@@ -501,7 +501,7 @@ const NewMovie = () => {
             fun_facts: facts,
         }));
 
-        localStorage.setItem("facts", JSON.stringify(facts));
+        localStorage.setItem("fun_facts", JSON.stringify(facts));
     };
 
     const handleCastChange = (cast) => {
@@ -521,8 +521,7 @@ const NewMovie = () => {
                 setAdding(false);
                 setSuccess(true);
 
-                const keys = ["title", "description", "release", "duration", "video_id", "genres", "cast", "fun_facts"];
-                for (const k in keys) localStorage.removeItem(k);
+                for (const k in movie) localStorage.removeItem(k);
             })
             .catch((err) => {
                 setAdding(false);
