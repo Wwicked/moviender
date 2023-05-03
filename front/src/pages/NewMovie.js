@@ -501,7 +501,7 @@ const NewMovie = () => {
             fun_facts: facts,
         }));
 
-        localStorage.setItem("fun_facts", JSON.stringify(facts));
+        if (facts.length > 0) localStorage.setItem("fun_facts", JSON.stringify(facts));
     };
 
     const handleCastChange = (cast) => {
@@ -510,7 +510,7 @@ const NewMovie = () => {
             cast: cast,
         }));
 
-        localStorage.setItem("cast", JSON.stringify(cast));
+        if (cast.length > 0) localStorage.setItem("cast", JSON.stringify(cast));
     };
 
     const submitForm = async (data) => {
