@@ -15,6 +15,7 @@ import { ListGroup } from "react-bootstrap";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Modal from "react-bootstrap/Modal";
 import MovieService from "../services/movie.service";
+import GenreService from "../services/genre.service";
 
 const ErrorFeedback = ({ error }) => {
     return error ? <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback> : <></>;
@@ -369,14 +370,15 @@ const NewGenreModal = ({ show, onClose, onNewGenre }) => {
     const handleAdd = () => {
         setLoading(true);
 
-        // TODO: Send a request to backend to create a new genre
-        const success = true;
-
-        if (success) {
-            onNewGenre(name);
-            setName("");
-            onClose();
-        }
+        GenreService.newGenre(name)
+            .then((res) => {
+                onNewGenre(name);
+                setName("");
+                onClose();
+            })
+            .catch((err) => {
+                console.log(`Error: ${JSON.stringify(err)}`);
+            });
 
         setLoading(false);
     };
@@ -417,6 +419,13 @@ const NewGenreModal = ({ show, onClose, onNewGenre }) => {
 };
 
 const NewMovie = () => {
+    const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+    const MB = (amt) => {
+        return amt * 1024 * 1024;
+    };
+    const MAX_IMAGE_SIZE = MB(5);
+    const MAX_ALL_IMAGES_SIZE = MB(20);
+
     const schema = yup
         .object()
         .shape({
@@ -429,18 +438,48 @@ const NewMovie = () => {
                 .array()
                 .of(yup.string())
                 .test("genres", "Please choose at least one genre", () => movie.genres.length > 0),
-            cast: yup
+            cast: yup.array().of(yup.string()),
+            fun_facts: yup.array().of(yup.mixed()),
+            images: yup
                 .array()
-                .of(yup.string())
-                .test("cast", "Please provide at least one cast member", () => movie.cast.length > 0),
-            fun_facts: yup.array().of(yup.string()),
+                .of(yup.mixed())
+                .test("size", "File size is too big/Cumulative size too big", () => {
+                    let overall = 0;
+
+                    for (const img of movie.images) {
+                        overall += img.size;
+
+                        if (img.size >= MAX_IMAGE_SIZE) {
+                            return false;
+                        }
+                    }
+
+                    if (overall >= MAX_ALL_IMAGES_SIZE) {
+                        return false;
+                    }
+
+                    return true;
+                })
+                .test("type", "Invalid file format", () => {
+                    for (const img of movie.images) {
+                        if (!SUPPORTED_FORMATS.includes(img.type)) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                })
+                .required("Image is required."),
         })
         .required();
 
     useEffect(() => {
         setLoading(true);
-        setAllGenres(["Horror", "Action", "Crime", "Drama"]);
-        setLoading(false);
+
+        GenreService.getAll().then((res) => {
+            setAllGenres(res.data);
+            setLoading(false);
+        });
     }, []);
 
     const getFromStorageWithFallback = (key, fallback) => {
@@ -459,6 +498,20 @@ const NewMovie = () => {
         cast: getFromStorageWithFallback("cast", []),
         fun_facts: getFromStorageWithFallback("fun_facts", []),
     });
+
+    const urlObjectsFromImages = () => {
+        const urlObjects = [];
+
+        movie.images.forEach((file) => {
+            urlObjects.push(URL.createObjectURL(file));
+        });
+
+        return urlObjects;
+    };
+    const previewMovie = {
+        ...movie,
+        images: urlObjectsFromImages(),
+    };
 
     const {
         register,
@@ -513,6 +566,13 @@ const NewMovie = () => {
         if (cast.length > 0) localStorage.setItem("cast", JSON.stringify(cast));
     };
 
+    const handleSelectFiles = (files) => {
+        setMovie((prev) => ({
+            ...prev,
+            images: files,
+        }));
+    };
+
     const submitForm = async (data) => {
         setAdding(true);
 
@@ -544,7 +604,7 @@ const NewMovie = () => {
 
             <Row>
                 <Col md={12} lg={12} xl={6} className="order-0">
-                    <MoviePreview movie={movie} />
+                    <MoviePreview movie={previewMovie} />
                 </Col>
 
                 <Col md={12} lg={12} xl={6} className="order-1">
@@ -662,21 +722,7 @@ const NewMovie = () => {
                                     />
                                 </Form.Group>
 
-                                <ImageSelector
-                                    onSelectedFilesChange={(files) => {
-                                        const urlObjects = [];
-
-                                        files.forEach((file) => {
-                                            urlObjects.push(URL.createObjectURL(file));
-                                        });
-
-                                        setMovie((prev) => ({
-                                            ...prev,
-                                            images: urlObjects,
-                                        }));
-                                    }}
-                                />
-
+                                <ImageSelector onSelectedFilesChange={handleSelectFiles} />
                                 <CastList initialCast={movie.cast} onCastChange={handleCastChange} />
                                 <FunFacts initialFacts={movie.fun_facts} onFactsChange={handleFactsChange} />
 

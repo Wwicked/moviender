@@ -85,9 +85,9 @@ const App = () => {
                     </Route>
                 </Route>
 
-                <Route exact path="/test" element={<TestPage />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/register" element={<Register />} />
+                <Route exact path="/test" element={<TestPage />} />
                 <Route path="*" element={<PageNotFound />} />
             </Routes>
         </>

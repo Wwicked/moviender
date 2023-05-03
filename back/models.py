@@ -4,6 +4,9 @@ db = SQLAlchemy()
 
 
 class Config:
+    def MB(amt):
+        return amt * 1024 * 1024
+
     MAX_USER_TOKEN = 50
     MAX_USER_NAME = 50
     MAX_USER_PASSWORD = 150
@@ -18,6 +21,9 @@ class Config:
 
     MAX_FUN_FACT_HEADER = 100
     MAX_FUN_FACT_CONTENT = 500
+
+    MAX_IMAGES_NUM = 10
+    MAX_IMAGES_SIZE = MB(20)
 
 
 class Base(db.Model):

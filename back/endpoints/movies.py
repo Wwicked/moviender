@@ -1,9 +1,12 @@
 from flask import Blueprint, jsonify, request, current_app
 from flask_jwt_extended import jwt_required
 from endpoints.auth import admin_required
-from models import Config
+from models import Config, Movie, Genre, db, CastMember, FunFact
 from json import loads
 from schema import Schema, And, Use, SchemaError
+from werkzeug.utils import secure_filename
+import os
+from time import time
 
 movies_blueprint = Blueprint("movies", __name__)
 
@@ -17,12 +20,16 @@ def check_schema(custom_schema, data):
         return False
 
 
-# TODO: implement
 def valid_genres(genres):
+    for genre in genres:
+        obj = Genre.query.filter_by(name=genre).first()
+
+        if not obj:
+            return False
+
     return True
 
 
-# TODO: implement
 def valid_cast(members):
     cast_schema = Schema(
         {
@@ -34,7 +41,6 @@ def valid_cast(members):
     return check_schema(Schema([cast_schema]), members)
 
 
-# TODO: implement
 def valid_fun_facts(facts):
     fun_facts_schema = Schema(
         {
@@ -46,16 +52,13 @@ def valid_fun_facts(facts):
     return check_schema(Schema([fun_facts_schema]), facts)
 
 
-def validate_movie_data(data):
-    current_app.logger.info(data)
-
+def validate_movie_data(data, images):
     required_fields = [
         "title",
         "description",
         "release",
         "duration",
         "genres",
-        "images",
     ]
 
     for field in required_fields:
@@ -102,7 +105,39 @@ def validate_movie_data(data):
     if not isinstance(fun_facts, list) or not valid_fun_facts(fun_facts):
         return False, "Invalid fun facts"
 
+    # Images
+    if len(images) == 0:
+        return False, "No images provided"
+
+    if len(images) > Config.MAX_IMAGES_NUM:
+        return False, "Too many images"
+
     return True, ""
+
+
+def save_movie_images(movie, images):
+    # Create folder for this specific movie (static/movies/{movie.id})
+    movie_folder = os.path.join(
+        current_app.static_folder,
+        current_app.config["MOVIE_PICTURES_FOLDER"],
+        f"{movie.id}",
+    )
+
+    if not os.path.exists(movie_folder):
+        os.makedirs(movie_folder)
+
+    # Save all the images to that folder
+    for index, image in enumerate(images):
+        filename = secure_filename(
+            f"{index}.{current_app.config['MOVIE_PICTURES_EXTENSION']}"
+        )
+        target_folder = os.path.join(
+            current_app.static_folder,
+            current_app.config["MOVIE_PICTURES_FOLDER"],
+            f"{movie.id}",
+            filename,
+        )
+        image.save(target_folder)
 
 
 @movies_blueprint.route("/new", methods=["POST"])
@@ -112,20 +147,76 @@ def add_movie():
     if "movie" not in request.form:
         return jsonify({"message": "Missing data"}), 400
 
+    if "images[]" not in list(request.files):
+        return jsonify({"message": "Missing images"}), 400
+
     data = loads(request.form["movie"])
-    ok, message = validate_movie_data(data)
+    images = request.files.getlist("images[]")
+    ok, message = validate_movie_data(data, images)
 
     if not ok:
         return jsonify({"message": message}), 400
 
-    title = data.get("title", "")
-    description = data.get("description", "")
-    release = data.get("release", 0)
-    duration = data.get("duration", 0)
+    title = data.get("title")
+    description = data.get("description")
+    release = data.get("release")
+    duration = data.get("duration")
     video_id = data.get("video_id", "")
     genres = data.get("genres", [])
     cast = data.get("cast", [])
     fun_facts = data.get("fun_facts", [])
-    images = data.get("images", [])
+    genres_objects = [Genre.query.filter_by(name=genre).first() for genre in genres]
 
-    return jsonify({"message": f"Reached endpoint with title {title}"}), 200
+    # Create the movie, so we get the id
+    movie = Movie(
+        title=title,
+        description=description,
+        release=release,
+        duration=duration,
+        video_id=video_id,
+        added=int(time()),
+        genres=[],
+        cast=[],
+        fun_facts=[],
+    )
+
+    db.session.add(movie)
+    db.session.commit()
+    db.session.refresh(movie)
+
+    cast_objects = []
+    for member in cast:
+        obj = CastMember(
+            real_name=member["real"], character_name=member["movie"], movie_id=movie.id
+        )
+
+        db.session.add(obj)
+        db.session.commit()
+        db.session.refresh(obj)
+
+        cast_objects.append(obj)
+
+    fun_facts_objects = []
+    for fact in fun_facts:
+        obj = FunFact(
+            header=fact["header"],
+            content=fact["content"],
+            movie_id=movie.id,
+        )
+
+        db.session.add(obj)
+        db.session.commit()
+        db.session.refresh(obj)
+
+        fun_facts_objects.append(obj)
+
+    # Update fields which require id
+    movie.genres = genres_objects
+    movie.cast = cast_objects
+    movie.fun_facts = fun_facts_objects
+
+    db.session.commit()
+
+    save_movie_images(movie, images)
+
+    return jsonify(movie.id), 200
