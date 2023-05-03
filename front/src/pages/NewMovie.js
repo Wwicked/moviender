@@ -119,10 +119,10 @@ const ImageSelector = ({ onSelectedFilesChange }) => {
     );
 };
 
-const CastList = ({ onCastChange }) => {
+const CastList = ({ initialCast, onCastChange }) => {
     const [actorName, setActorName] = useState("");
     const [characterName, setCharacterName] = useState("");
-    const [castList, setCastList] = useState([]);
+    const [castList, setCastList] = useState(initialCast);
     const [showModal, setShowModal] = useState(false);
 
     const handleAdd = () => {
@@ -240,10 +240,10 @@ const CastList = ({ onCastChange }) => {
     );
 };
 
-const FunFacts = ({ onFactsChange }) => {
+const FunFacts = ({ initialFacts, onFactsChange }) => {
     const [header, setHeader] = useState("");
     const [content, setContent] = useState("");
-    const [factsList, setFactsList] = useState([]);
+    const [factsList, setFactsList] = useState(initialFacts);
     const [showModal, setShowModal] = useState(false);
 
     const handleAdd = () => {
@@ -443,17 +443,21 @@ const NewMovie = () => {
         setLoading(false);
     }, []);
 
+    const getFromStorageWithFallback = (key, fallback) => {
+        const found = localStorage.getItem(key);
+        return found ? JSON.parse(found) : fallback;
+    };
+
     const [movie, setMovie] = useState({
-        id: 1,
-        title: "",
-        description: "",
-        release: 0,
-        duration: 0,
-        video_id: "",
+        title: getFromStorageWithFallback("title", ""),
+        description: getFromStorageWithFallback("description", ""),
+        release: getFromStorageWithFallback("release", ""),
+        duration: getFromStorageWithFallback("duration", ""),
+        video_id: getFromStorageWithFallback("video_id", ""),
         images: [],
-        genres: [],
-        cast: [],
-        fun_facts: [],
+        genres: getFromStorageWithFallback("genres", []),
+        cast: getFromStorageWithFallback("cast", []),
+        fun_facts: getFromStorageWithFallback("fun_facts", []),
     });
 
     const {
@@ -474,6 +478,7 @@ const NewMovie = () => {
     const handleChange = (event) => {
         const { name, value } = event.target;
         setMovie((prevMovie) => ({ ...prevMovie, [name]: value }));
+        localStorage.setItem(name, JSON.stringify(value));
     };
 
     const handleGenreChange = (value) => {
@@ -483,6 +488,29 @@ const NewMovie = () => {
                 ? prevMovie.genres.filter((genre) => genre !== value)
                 : [...prevMovie.genres, value],
         }));
+
+        const old = getFromStorageWithFallback("genres", []);
+        const updated = old.includes(value) ? old.filter((g) => g !== value) : [...old, value];
+
+        localStorage.setItem("genres", JSON.stringify(updated));
+    };
+
+    const handleFactsChange = (facts) => {
+        setMovie((prev) => ({
+            ...prev,
+            fun_facts: facts,
+        }));
+
+        localStorage.setItem("facts", JSON.stringify(facts));
+    };
+
+    const handleCastChange = (cast) => {
+        setMovie((prev) => ({
+            ...prev,
+            cast: cast,
+        }));
+
+        localStorage.setItem("cast", JSON.stringify(cast));
     };
 
     const submitForm = async (data) => {
@@ -492,6 +520,9 @@ const NewMovie = () => {
             .then((res) => {
                 setAdding(false);
                 setSuccess(true);
+
+                const keys = ["title", "description", "release", "duration", "video_id", "genres", "cast", "fun_facts"];
+                for (const k in keys) localStorage.removeItem(k);
             })
             .catch((err) => {
                 setAdding(false);
@@ -647,23 +678,8 @@ const NewMovie = () => {
                                     }}
                                 />
 
-                                <CastList
-                                    onCastChange={(newCast) => {
-                                        setMovie((prev) => ({
-                                            ...prev,
-                                            cast: newCast,
-                                        }));
-                                    }}
-                                />
-
-                                <FunFacts
-                                    onFactsChange={(facts) => {
-                                        setMovie((prev) => ({
-                                            ...prev,
-                                            fun_facts: facts,
-                                        }));
-                                    }}
-                                />
+                                <CastList initialCast={movie.cast} onCastChange={handleCastChange} />
+                                <FunFacts initialFacts={movie.fun_facts} onFactsChange={handleFactsChange} />
 
                                 <Button variant="primary" type="submit" className="mt-5" disabled={adding}>
                                     {adding ? "Adding..." : "Add Movie"}
