@@ -7,6 +7,7 @@ from schema import Schema, And, Use, SchemaError
 from werkzeug.utils import secure_filename
 import os
 from time import time
+import random
 
 movies_blueprint = Blueprint("movies", __name__)
 
@@ -220,3 +221,21 @@ def add_movie():
     save_movie_images(movie, images)
 
     return jsonify(movie.id), 200
+
+
+@movies_blueprint.route("/pick", methods=["GET"])
+@jwt_required()
+def pick():
+    movies = Movie.query.all()
+
+    if movies:
+        movie = random.choice(movies)
+
+        data = movie.to_dict()
+        data["images"] = [
+            "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSh4s0ZI6Yh_zxjwhbNsatGFIuCrAuL5SGV5QDL_wrlZ0Uoeg7s"
+        ]
+    else:
+        return jsonify({"message": "No movies"}), 400
+
+    return jsonify(data), 200
