@@ -13,11 +13,13 @@ import { SET_USER } from "./reducers/types";
 import UserService from "./services/user.service";
 import CustomNav from "./components/Nav";
 import TestPage from "./pages/TestPage";
+import { removeAuthCookiesAndHeader } from "./services/api";
 
 const ProtectedRoute = ({ redirectPath = "/login" }) => {
     const { user } = useSelector((state) => state.user);
 
     if (!user) {
+        removeAuthCookiesAndHeader();
         return <Navigate to={redirectPath} replace />;
     }
 
