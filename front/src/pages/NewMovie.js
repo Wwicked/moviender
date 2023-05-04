@@ -524,6 +524,7 @@ const NewMovie = () => {
 
     const [loading, setLoading] = useState(true);
     const [adding, setAdding] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [success, setSuccess] = useState(false);
     const [allGenres, setAllGenres] = useState([]);
     const [showNewGenreModal, setShowNewGenreModal] = useState(false);
@@ -532,6 +533,7 @@ const NewMovie = () => {
         const { name, value } = event.target;
         setMovie((prevMovie) => ({ ...prevMovie, [name]: value }));
         localStorage.setItem(name, JSON.stringify(value));
+        setErrorMessage("");
     };
 
     const handleGenreChange = (value) => {
@@ -546,6 +548,7 @@ const NewMovie = () => {
         const updated = old.includes(value) ? old.filter((g) => g !== value) : [...old, value];
 
         if (updated.length > 0) localStorage.setItem("genres", JSON.stringify(updated));
+        setErrorMessage("");
     };
 
     const handleFactsChange = (facts) => {
@@ -555,6 +558,7 @@ const NewMovie = () => {
         }));
 
         if (facts.length > 0) localStorage.setItem("fun_facts", JSON.stringify(facts));
+        setErrorMessage("");
     };
 
     const handleCastChange = (cast) => {
@@ -564,6 +568,7 @@ const NewMovie = () => {
         }));
 
         if (cast.length > 0) localStorage.setItem("cast", JSON.stringify(cast));
+        setErrorMessage("");
     };
 
     const handleSelectFiles = (files) => {
@@ -571,6 +576,7 @@ const NewMovie = () => {
             ...prev,
             images: files,
         }));
+        setErrorMessage("");
     };
 
     const submitForm = async (data) => {
@@ -586,7 +592,7 @@ const NewMovie = () => {
             .catch((err) => {
                 setAdding(false);
                 setSuccess(false);
-                console.log(`Error: ${JSON.stringify(err)}`);
+                setErrorMessage(err?.response?.data?.message);
             });
     };
 
@@ -596,12 +602,6 @@ const NewMovie = () => {
 
     return (
         <Container className="my-5">
-            {success && (
-                <Row>
-                    <Alert variant="success">Added movie!</Alert>
-                </Row>
-            )}
-
             <Row>
                 <Col md={12} lg={12} xl={6} className="order-0">
                     <MoviePreview movie={previewMovie} />
@@ -726,9 +726,12 @@ const NewMovie = () => {
                                 <CastList initialCast={movie.cast} onCastChange={handleCastChange} />
                                 <FunFacts initialFacts={movie.fun_facts} onFactsChange={handleFactsChange} />
 
-                                <Button variant="primary" type="submit" className="mt-5" disabled={adding}>
+                                <Button variant="primary" type="submit" className="mt-5" disabled={adding || success}>
                                     {adding ? "Adding..." : "Add Movie"}
                                 </Button>
+
+                                {success && <Alert variant="success">Successfuly added the movie.</Alert>}
+                                {errorMessage.length > 0 && <Alert variant="danger">{errorMessage}</Alert>}
                             </Row>
                         </Form>
                     </Container>
