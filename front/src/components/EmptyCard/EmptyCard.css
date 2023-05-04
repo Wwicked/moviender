@@ -1,0 +1,6 @@
+.empty-card {
+    width: 100%;
+    margin: 0 auto;
+    height: 90vh !important;
+    background-color: rgb(245, 245, 245);
+}
