@@ -35,9 +35,9 @@ const MovieCard = ({ movie, onLike, onDislike, onWatchLater, onInfo }) => {
                 </div>
 
                 <Card.Body>
-                    <Card.Title className="title">{movie.title}</Card.Title>
+                    <Card.Title className="title">{movie?.title}</Card.Title>
                     <Card.Subtitle className="release">
-                        {movie.release} &bull; {movie.genres.join(", ")}
+                        {movie?.release} &bull; {movie?.genres?.join(", ")}
                     </Card.Subtitle>
 
                     <div className="button-group">
