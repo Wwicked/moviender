@@ -87,7 +87,7 @@ const Loginnew = () => {
                     }
                 } else if (err?.request) {
                     setLoginError(true);
-                    setLoginErrorMessage("Client-side error. Please try again.");
+                    setLoginErrorMessage("Unknown error. Please try again.");
                 }
 
                 setLoading(false);

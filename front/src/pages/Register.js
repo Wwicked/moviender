@@ -90,7 +90,7 @@ const Register = () => {
                         setRegisterErrorMessage("User with that username already exists.");
                     }
                 } else if (err.request) {
-                    setRegisterErrorMessage("Client-side error. Please try again.");
+                    setRegisterErrorMessage("Unknown error. Please try again.");
                 }
 
                 setLoading(false);
