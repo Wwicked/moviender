@@ -74,6 +74,10 @@ def validate_movie_data(data, images):
     ):
         return False, "Invalid title"
 
+    exists = Movie.query.filter_by(title=title).first()
+    if exists:
+        return False, "Movie with that title already exists"
+
     description = data.get("description", "")
     if (
         not isinstance(description, str)
@@ -156,6 +160,7 @@ def add_movie():
     ok, message = validate_movie_data(data, images)
 
     if not ok:
+        current_app.logger.info(f"Return message: {message}")
         return jsonify({"message": message}), 400
 
     title = data.get("title")
