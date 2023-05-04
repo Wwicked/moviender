@@ -14,8 +14,13 @@ const newMovie = (movie) => {
     return api.post(`/movies/new`, data);
 };
 
+const loadNext = () => {
+    return api.get(`/movies/pick`);
+};
+
 const MovieService = {
     newMovie,
+    loadNext,
 };
 
 export default MovieService;
