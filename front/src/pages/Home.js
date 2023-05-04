@@ -123,34 +123,34 @@ const Home = () => {
         <Container>
             <Container className="d-flex justify-content-center my-2">
                 {loading && (
-                    <Container>
-                        <EmptyCard
-                            title={failedToLoad ? "Failed to load..." : <Spinner />}
-                            subtitle={
-                                failedToLoad ? (
-                                    <Button
-                                        onClick={() => {
-                                            loadNextMovie();
-                                        }}
-                                        size="sm"
-                                    >
-                                        Try again?
-                                    </Button>
-                                ) : (
-                                    "Loading..."
-                                )
-                            }
-                        />
-                    </Container>
+                    <EmptyCard
+                        title={failedToLoad ? "Failed to load..." : <Spinner />}
+                        subtitle={
+                            failedToLoad ? (
+                                <Button
+                                    onClick={() => {
+                                        loadNextMovie();
+                                    }}
+                                    size="sm"
+                                >
+                                    Try again?
+                                </Button>
+                            ) : (
+                                "Loading..."
+                            )
+                        }
+                    />
                 )}
 
                 {movies.length === 0 && !loading && (
-                    <Container>
-                        <EmptyCard
-                            title="You've ran out of movies!"
-                            subtitle={`Try ${(<Button>fixing</Button>)} the criteria`}
-                        ></EmptyCard>
-                    </Container>
+                    <EmptyCard
+                        title="You've ran out of movies!"
+                        subtitle={
+                            <span>
+                                Try <button>fixing</button> the criteria
+                            </span>
+                        }
+                    ></EmptyCard>
                 )}
 
                 {movies.length > 1 && (
