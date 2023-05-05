@@ -62,7 +62,7 @@ const InfoModal = ({ show, movie, onClose }) => {
                                 <iframe
                                     width="853"
                                     height="480"
-                                    src={`https://www.youtube.com/embed/${movie?.videoId}`}
+                                    src={`https://www.youtube.com/embed/${movie?.video_id}`}
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                     title="Embedded youtube"
