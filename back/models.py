@@ -59,6 +59,14 @@ class Movie(Base):
     cast = db.relationship("CastMember", back_populates="movie")
     fun_facts = db.relationship("FunFact", back_populates="movie")
 
+    def to_dict(self):
+        data = super().to_dict()
+        data["genres"] = [genre.name for genre in self.genres]
+        data["cast"] = [member.to_dict() for member in self.cast]
+        data["fun_facts"] = [fact.to_dict() for fact in self.fun_facts]
+
+        return data
+
 
 class Genre(Base):
     __tablename__ = "genres"
@@ -79,6 +87,14 @@ class CastMember(Base):
 
     movie = db.relationship("Movie", back_populates="cast")
 
+    def to_dict(self):
+        data = {
+            "real": self.real_name,
+            "movie": self.character_name,
+        }
+
+        return data
+
 
 class FunFact(Base):
     __tablename__ = "fun_facts"
@@ -89,6 +105,14 @@ class FunFact(Base):
     movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)
 
     movie = db.relationship("Movie", back_populates="fun_facts")
+
+    def to_dict(self):
+        data = {
+            "header": self.header,
+            "content": self.content,
+        }
+
+        return data
 
 
 movie_genre = db.Table(
