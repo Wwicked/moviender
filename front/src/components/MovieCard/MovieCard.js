@@ -25,7 +25,7 @@ const MovieCard = ({ movie, onLike, onDislike, onWatchLater, onInfo }) => {
 
     return (
         <Col col={12}>
-            <Card className={`movie-card`}>
+            <Card className="movie-card shadow-lg">
                 <ImageIndicator totalImages={movie?.images?.length} currentIndex={imageIndex} />
 
                 <div className="image-wrapper">
