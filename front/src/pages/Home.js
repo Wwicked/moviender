@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Container, Spinner, Button } from "react-bootstrap";
+import { Button, Container, Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import MovieCard from "../components/MovieCard/MovieCard";
-import InfoModal from "../components/MovieCard/InfoModal";
-import UserService from "../services/user.service";
-import MovieService from "../services/movie.service";
-import "./Home.css";
 import EmptyCard from "../components/EmptyCard/EmptyCard";
+import InfoModal from "../components/MovieCard/InfoModal";
+import MovieCard from "../components/MovieCard/MovieCard";
+import MovieService from "../services/movie.service";
+import UserService from "../services/user.service";
+import "./Home.css";
 
 const Home = () => {
     const { user } = useSelector((state) => state.user);
@@ -23,25 +23,22 @@ const Home = () => {
     const [swipeDirection, setSwipeDirection] = useState(null);
 
     useEffect(() => {
-        loadFirstTwo();
-    }, []);
-
-    const loadFirstTwo = () => {
         setLoading(true);
-        setFailedToLoad(true);
+        setFailedToLoad(false);
 
-        MovieService.loadNext().then((res) => {
-            setMovies((prev) => [...prev, res.data]);
-            setLoading(false);
-            setFailedToLoad(false);
-        });
-
-        MovieService.loadNext().then((res) => {
-            setMovies((prev) => [...prev, res.data]);
-            setLoading(false);
-            setFailedToLoad(false);
-        });
-    };
+        Promise.all([MovieService.loadNext(), MovieService.loadNext()])
+            .then((responses) => {
+                const movies = responses.map((response) => response.data);
+                setMovies(movies);
+                setLoading(false);
+                setFailedToLoad(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                setFailedToLoad(true);
+                console.error(error);
+            });
+    }, []);
 
     const loadNextMovie = () => {
         MovieService.loadNext()

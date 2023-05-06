@@ -1,11 +1,16 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import axiosRetry from "axios-retry";
 
 const API_URL = "http://localhost:5000";
+const DEFAULT_RETRIES = 3;
+
 const token = Cookies.get("access_token");
 const api = axios.create({
     baseURL: API_URL,
 });
+
+axiosRetry(api, { retries: DEFAULT_RETRIES });
 
 if (token) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
