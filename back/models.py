@@ -33,6 +33,31 @@ class Base(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
+movie_genre = db.Table(
+    "movie_genre",
+    db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
+    db.Column("genre_id", db.Integer, db.ForeignKey("genres.id"), primary_key=True),
+)
+
+liked_movies = db.Table(
+    "liked_movies",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
+)
+
+disliked_movies = db.Table(
+    "disliked_movies",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
+)
+
+watch_later_movies = db.Table(
+    "watch_later_movies",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
+)
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -42,6 +67,29 @@ class User(Base):
     username = db.Column(db.String(Config.MAX_USER_NAME), nullable=False, unique=True)
     password = db.Column(db.String(Config.MAX_USER_PASSWORD), nullable=False)
     joined = db.Column(db.Integer, nullable=False)
+
+    liked_movies = db.relationship("Movie", secondary=liked_movies, backref="liked_by")
+    disliked_movies = db.relationship(
+        "Movie", secondary=disliked_movies, backref="disliked_by"
+    )
+    watch_later_movies = db.relationship(
+        "Movie", secondary=watch_later_movies, backref="watch_later_by"
+    )
+
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "is_admin": self.is_admin,
+            "token": self.token,
+            "username": self.username,
+            "password": self.password,
+            "joined": self.joined,
+            "liked_movies": [movie.id for movie in self.liked_movies],
+            "disliked_movies": [movie.id for movie in self.disliked_movies],
+            "watch_later_movies": [movie.id for movie in self.watch_later_movies],
+        }
+
+        return data
 
 
 class Movie(Base):
@@ -113,10 +161,3 @@ class FunFact(Base):
         }
 
         return data
-
-
-movie_genre = db.Table(
-    "movie_genre",
-    db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
-    db.Column("genre_id", db.Integer, db.ForeignKey("genres.id"), primary_key=True),
-)
