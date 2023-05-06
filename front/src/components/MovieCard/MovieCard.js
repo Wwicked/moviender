@@ -25,7 +25,7 @@ const MovieCard = ({ movie, onLike, onDislike, onWatchLater, onInfo }) => {
 
     return (
         <Col col={12}>
-            <Card className="movie-card shadow-lg">
+            <Card className="movie-card shadow">
                 <ImageIndicator totalImages={movie?.images?.length} currentIndex={imageIndex} />
 
                 <div className="image-wrapper">
@@ -62,11 +62,11 @@ const MovieCard = ({ movie, onLike, onDislike, onWatchLater, onInfo }) => {
                         </Button>
 
                         <Button
-                            className="info"
+                            className="info shadow"
                             onClick={() => {
                                 onInfo(movie);
                             }}
-                            variant="outline-primary shadow"
+                            variant="outline-secondary"
                         >
                             <FontAwesomeIcon icon={faQuestion} />
                         </Button>

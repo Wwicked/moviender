@@ -2,6 +2,111 @@
     width: 100%;
     margin: 0 auto;
     height: 90vh !important;
+    color: rgb(202, 202, 202);
+    border-color: #353a41 !important;
+
+    .card-body {
+        background-color: #22272e;
+    }
+
+    .left {
+        transform: translateX(-150%) rotate(-15deg);
+        transition: transform 0.4s ease-in-out;
+    }
+
+    .right {
+        transform: translateX(150%) rotate(15deg);
+        transition: transform 0.4s ease-in-out;
+    }
+
+    .up {
+        transform: translateY(-150%) rotate(0deg);
+        transition: transform 0.4s ease-in-out;
+    }
+
+    .title {
+        font-size: 1.65rem !important;
+    }
+
+    .release {
+        font-size: 1rem;
+        color: rgb(138, 138, 138);
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+
+    .button-group button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .image-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 90vh;
+    }
+
+    .image-wrapper img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+        cursor: pointer;
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            right: 0;
+        }
+    }
+
+    .image-overlay:hover {
+        opacity: 0.2;
+    }
+
+    .image-indicators {
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+    }
+
+    .indicator {
+        width: 35px;
+        height: 4px;
+        border-radius: 10%;
+        background-color: #616161;
+        margin: 0 8px;
+        transition: all 0.4s ease;
+
+        .active {
+            background-color: #ffffff;
+        }
+    }
 }
 
 @media only screen and (max-width: 576px) {
@@ -14,103 +119,4 @@
     .movie-card {
         width: 580px;
     }
-}
-
-.movie-card.left {
-    transform: translateX(-150%) rotate(-15deg);
-    transition: transform 0.4s ease-in-out;
-}
-
-.movie-card.right {
-    transform: translateX(150%) rotate(15deg);
-    transition: transform 0.4s ease-in-out;
-}
-
-.movie-card.up {
-    transform: translateY(-150%) rotate(0deg);
-    transition: transform 0.4s ease-in-out;
-}
-
-.title {
-    font-size: 1.65rem !important;
-}
-
-.release {
-    font-size: 1rem;
-    color: rgb(56, 56, 56);
-}
-
-.button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-}
-
-.button-group button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 1.3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.image-wrapper {
-    position: relative;
-    overflow: hidden;
-    height: 90vh;
-}
-
-.image-wrapper img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.image-overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 50%;
-    opacity: 0;
-    z-index: 1;
-    cursor: pointer;
-}
-
-.image-overlay.left {
-    left: 0;
-}
-
-.image-overlay.right {
-    right: 0;
-}
-
-.image-overlay:hover {
-    opacity: 0.2;
-}
-
-.image-indicators {
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-}
-
-.indicator {
-    width: 35px;
-    height: 4px;
-    border-radius: 10%;
-    background-color: #616161;
-    margin: 0 8px;
-    transition: all 0.4s ease;
-}
-
-.indicator.active {
-    background-color: #ffffff;
 }

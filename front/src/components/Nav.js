@@ -20,7 +20,7 @@ const NavLoggedIn = () => {
     };
 
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="dark" expand="lg">
             <Container fluid>
                 <Navbar.Brand href="#">
                     <Link to="/" replace>
