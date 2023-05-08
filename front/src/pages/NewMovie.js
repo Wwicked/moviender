@@ -443,7 +443,7 @@ const NewMovie = () => {
             images: yup
                 .array()
                 .of(yup.mixed())
-                .test("size", "File size is too big/Cumulative size too big", () => {
+                .test("size", "Images size too big", () => {
                     let overall = 0;
 
                     for (const img of movie.images) {
@@ -460,7 +460,7 @@ const NewMovie = () => {
 
                     return true;
                 })
-                .test("type", "Invalid file format", () => {
+                .test("type", "Invalid image file format", () => {
                     for (const img of movie.images) {
                         if (!SUPPORTED_FORMATS.includes(img.type)) {
                             return false;
@@ -732,6 +732,15 @@ const NewMovie = () => {
 
                                 {success && <Alert variant="success">Successfuly added the movie.</Alert>}
                                 {errorMessage.length > 0 && <Alert variant="danger">{errorMessage}</Alert>}
+                                {errors && Object.keys(errors).length > 0 && (
+                                    <Alert variant="danger">
+                                        <ul>
+                                            {Object.keys(errors).map((fieldName) => (
+                                                <li key={fieldName}>{errors[fieldName].message}</li>
+                                            ))}
+                                        </ul>
+                                    </Alert>
+                                )}
                             </Row>
                         </Form>
                     </Container>
