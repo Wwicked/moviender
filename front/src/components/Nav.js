@@ -1,17 +1,17 @@
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { removeAuthCookiesAndHeader } from "../services/api";
 import { SET_USER } from "../reducers/types";
 
 const NavLoggedIn = () => {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const onLogOut = () => {
+    const handleClickLogOut = () => {
         removeAuthCookiesAndHeader();
         dispatch({
             type: SET_USER,
@@ -19,31 +19,29 @@ const NavLoggedIn = () => {
         });
     };
 
+    const handleClickHome = () => {
+        navigate("/");
+    };
+
+    const handleClickNewMovie = () => {
+        navigate("/admin/new");
+    };
+
     return (
-        <Navbar bg="dark" expand="lg">
-            <Container fluid>
-                <Navbar.Brand href="#">
-                    <Link to="/" replace>
-                        Home
-                    </Link>
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbarScroll" />
-                <Navbar.Collapse id="navbarScroll">
-                    <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll>
-                        <Nav.Link href="#">
-                            <Link to="/admin/new" replace>
-                                New movie
-                            </Link>
-                        </Nav.Link>
+        <Navbar bg="dark" variant="dark" expand="md">
+            <Container>
+                <Navbar.Brand onClick={handleClickHome}>Home</Navbar.Brand>
+
+                <Navbar.Toggle aria-controls="navbar-nav" />
+                <Navbar.Collapse id="navbar-nav">
+                    <Nav className="me-auto">
+                        {user?.is_admin && <Nav.Link onClick={handleClickNewMovie}>New Movie</Nav.Link>}
                     </Nav>
-                    <Form className="d-flex gap-3">
-                        <Navbar.Text>
-                            Hello, <a href="#login">{user?.username}</a>
-                        </Navbar.Text>
-                        <Nav.Link href="#" onClick={onLogOut}>
-                            Log out
-                        </Nav.Link>
-                    </Form>
+
+                    <Nav className="justify-content-end">
+                        <Nav.Link>Hello, {user?.username}</Nav.Link>
+                        <Nav.Link onClick={handleClickLogOut}>Log out</Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
