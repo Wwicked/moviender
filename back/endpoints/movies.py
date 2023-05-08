@@ -233,15 +233,11 @@ def add_movie():
 def pick():
     movies = Movie.query.all()
 
-    if movies:
-        movie = random.choice(movies)
-
-        data = movie.to_dict()
-        data["images"] = [
-            "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSh4s0ZI6Yh_zxjwhbNsatGFIuCrAuL5SGV5QDL_wrlZ0Uoeg7s"
-        ]
-    else:
+    if not movies:
         return jsonify({"message": "No movies"}), 400
+
+    movie = random.choice(movies)
+    data = movie.to_dict()
 
     return jsonify(data), 200
 
@@ -254,7 +250,6 @@ def get(movie_id):
 
 
 @movies_blueprint.route("/<int:movie_id>/images/<path:filename>", methods=["GET"])
-@jwt_required()
 def send_movie_image(movie_id, filename):
     directory = os.path.join(
         current_app.static_folder,
