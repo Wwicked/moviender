@@ -1,6 +1,6 @@
 # Todo
 
--   Better feedback at /admin/new when movie is created or error is thrown
+-   /pick should return a movie at random (if not already reacted to)
 
 -   Header
 -   Footer
