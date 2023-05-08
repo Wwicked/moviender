@@ -124,7 +124,12 @@ class Movie(Base):
 
         if os.path.exists(images_dir):
             data["images"] = [
-                url_for("movies.send_movie_image", movie_id=self.id, filename=filename)
+                url_for(
+                    "movies.send_movie_image",
+                    movie_id=self.id,
+                    filename=filename,
+                    _external=True,
+                )
                 for filename in os.listdir(images_dir)
                 if filename.endswith(current_app.config["MOVIE_PICTURES_EXTENSION"])
             ]
