@@ -29,7 +29,13 @@ services:
             DB_PORT: 5432
             DB_NAME: postgres
 
+        volumes:
+            - movie_images:/back/static/movies
+
     # front:
     #     build: ./front
     #     ports:
     #         - "3000:3000"
+
+volumes:
+    movie_images:
