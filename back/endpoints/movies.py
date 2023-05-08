@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, current_app, send_from_directory
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from endpoints.auth import admin_required
-from models import Config, Movie, Genre, db, CastMember, FunFact
+from models import Config, Movie, Genre, db, CastMember, FunFact, User
 from json import loads
 from schema import Schema, And, Use, SchemaError
 from werkzeug.utils import secure_filename
@@ -231,10 +231,28 @@ def add_movie():
 @movies_blueprint.route("/pick", methods=["GET"])
 @jwt_required()
 def pick():
+    user = User.query.filter_by(token=get_jwt_identity()).first_or_404()
     movies = Movie.query.all()
 
     if not movies:
         return jsonify({"message": "No movies"}), 400
+
+    def not_reacted_yet(movie):
+        if movie in user.liked_movies:
+            return False
+
+        if movie in user.disliked_movies:
+            return False
+
+        if movie in user.watch_later_movies:
+            return False
+
+        return True
+
+    movies = list(filter(not_reacted_yet, movies))
+
+    if len(movies) == 0:
+        return jsonify({"message": "No movies without a reaction"}), 400
 
     movie = random.choice(movies)
     data = movie.to_dict()

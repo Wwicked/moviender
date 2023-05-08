@@ -1,6 +1,6 @@
 # Todo
 
--   /pick should return a movie at random (if not already reacted to)
+-   /pick shouldn't return the same movie twice in a row (when initially loading the front and fetching 2 random movies)
 
 -   Header
 -   Footer
