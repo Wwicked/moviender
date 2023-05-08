@@ -423,8 +423,8 @@ const NewMovie = () => {
     const MB = (amt) => {
         return amt * 1024 * 1024;
     };
-    const MAX_IMAGE_SIZE = MB(5);
-    const MAX_ALL_IMAGES_SIZE = MB(20);
+    const MAX_IMAGE_SIZE = MB(8);
+    const MAX_ALL_IMAGES_SIZE = MB(30);
 
     const schema = yup
         .object()
