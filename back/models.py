@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask import url_for, current_app
+import os
 
 db = SQLAlchemy()
 
@@ -112,6 +114,20 @@ class Movie(Base):
         data["genres"] = [genre.name for genre in self.genres]
         data["cast"] = [member.to_dict() for member in self.cast]
         data["fun_facts"] = [fact.to_dict() for fact in self.fun_facts]
+        data["images"] = []
+
+        images_dir = os.path.join(
+            current_app.static_folder,
+            current_app.config["MOVIE_PICTURES_FOLDER"],
+            f"{self.id}",
+        )
+
+        if os.path.exists(images_dir):
+            data["images"] = [
+                url_for("movies.send_movie_image", movie_id=self.id, filename=filename)
+                for filename in os.listdir(images_dir)
+                if filename.endswith(current_app.config["MOVIE_PICTURES_EXTENSION"])
+            ]
 
         return data
 

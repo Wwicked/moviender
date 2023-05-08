@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request, current_app, send_from_directory
 from flask_jwt_extended import jwt_required
 from endpoints.auth import admin_required
 from models import Config, Movie, Genre, db, CastMember, FunFact
@@ -244,3 +244,25 @@ def pick():
         return jsonify({"message": "No movies"}), 400
 
     return jsonify(data), 200
+
+
+@movies_blueprint.route("/<int:movie_id>", methods=["GET"])
+@jwt_required()
+def get(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    return jsonify(movie.to_dict()), 200
+
+
+@movies_blueprint.route("/<int:movie_id>/images/<path:filename>", methods=["GET"])
+@jwt_required()
+def send_movie_image(movie_id, filename):
+    directory = os.path.join(
+        current_app.static_folder,
+        current_app.config["MOVIE_PICTURES_FOLDER"],
+        f"{movie_id}",
+    )
+
+    if not os.path.exists(os.path.join(directory, filename)):
+        return jsonify({"message": "File not found"}), 404
+
+    return send_from_directory(directory, filename)
