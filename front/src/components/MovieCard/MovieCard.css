@@ -2,12 +2,6 @@
     width: 100%;
     margin: 0 auto;
     height: 90vh !important;
-    color: rgb(202, 202, 202);
-    border-color: #353a41 !important;
-
-    .card-body {
-        background-color: #22272e;
-    }
 
     .left {
         transform: translateX(-150%) rotate(-15deg);
@@ -30,7 +24,6 @@
 
     .release {
         font-size: 1rem;
-        color: rgb(138, 138, 138);
     }
 
     .button-group {
