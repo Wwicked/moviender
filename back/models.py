@@ -83,8 +83,8 @@ class User(Base):
     excluded_genres = db.relationship(
         "Genre", secondary="excluded_genre", backref="excluded_by_users"
     )
-    year_from = db.Column(db.Integer)
-    year_to = db.Column(db.Integer)
+    year_from = db.Column(db.Integer, nullable=False)
+    year_to = db.Column(db.Integer, nullable=False)
 
     liked_movies = db.relationship("Movie", secondary=liked_movies, backref="liked_by")
     disliked_movies = db.relationship(
