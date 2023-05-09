@@ -7,6 +7,9 @@ import MovieCard from "../components/MovieCard/MovieCard";
 import MovieService from "../services/movie.service";
 import UserService from "../services/user.service";
 import "./Home.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
+import SettingsModal from "../components/SettingsModal/SettingsModal";
 
 const Home = () => {
     const { user } = useSelector((state) => state.user);
@@ -15,6 +18,8 @@ const Home = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState(null);
+
+    const [showSettings, setShowSettings] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [failedToLoad, setFailedToLoad] = useState(false);
@@ -143,12 +148,23 @@ const Home = () => {
                     <EmptyCard
                         title="You've ran out of movies!"
                         subtitle={
-                            <span>
-                                Try <button>fixing</button> the criteria
+                            <span
+                                onClick={() => {
+                                    setShowSettings(true);
+                                }}
+                            >
+                                Try fixing the criteria <FontAwesomeIcon icon={faCog} />
                             </span>
                         }
-                    ></EmptyCard>
+                    />
                 )}
+
+                <SettingsModal
+                    show={showSettings}
+                    onClose={() => {
+                        setShowSettings(false);
+                    }}
+                />
 
                 {movies.length > 1 && (
                     <div className="under">
