@@ -79,7 +79,7 @@ def update_settings(user_id):
         user.year_from = year_from
 
     year_to = int(data.get("year_to", -1))
-    if year_to != -1 and year_to and year_to > Config.MIN_YEAR_TO:
+    if year_to != -1 and year_to and year_to > Config.MAX_YEAR_TO:
         user.year_to = year_to
 
     return jsonify(user.to_dict()), 200
