@@ -159,12 +159,14 @@ const Home = () => {
                     />
                 )}
 
-                <SettingsModal
-                    show={showSettings}
-                    onClose={() => {
-                        setShowSettings(false);
-                    }}
-                />
+                {showSettings && (
+                    <SettingsModal
+                        show={showSettings}
+                        onClose={() => {
+                            setShowSettings(false);
+                        }}
+                    />
+                )}
 
                 {movies.length > 1 && (
                     <div className="under">

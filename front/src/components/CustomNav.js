@@ -48,12 +48,15 @@ const NavLoggedIn = () => {
                                     setShowSettings(true);
                                 }}
                             />
-                            <SettingsModal
-                                show={showSettings}
-                                onClose={() => {
-                                    setShowSettings(false);
-                                }}
-                            />
+
+                            {showSettings && (
+                                <SettingsModal
+                                    show={showSettings}
+                                    onClose={() => {
+                                        setShowSettings(false);
+                                    }}
+                                />
+                            )}
                         </Nav.Link>
                         <Nav.Link onClick={handleClickLogOut}>Log out</Nav.Link>
                     </Nav>
