@@ -27,6 +27,9 @@ class Config:
     MAX_IMAGES_NUM = 10
     MAX_IMAGES_SIZE = MB(20)
 
+    MIN_YEAR_FROM = 1900
+    MAX_YEAR_TO = 2025
+
 
 class Base(db.Model):
     __abstract__ = True
@@ -59,6 +62,12 @@ watch_later_movies = db.Table(
     db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
 )
 
+excluded_genre = db.Table(
+    "excluded_genre",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("genre_id", db.Integer, db.ForeignKey("genres.id"), primary_key=True),
+)
+
 
 class User(Base):
     __tablename__ = "users"
@@ -69,6 +78,13 @@ class User(Base):
     username = db.Column(db.String(Config.MAX_USER_NAME), nullable=False, unique=True)
     password = db.Column(db.String(Config.MAX_USER_PASSWORD), nullable=False)
     joined = db.Column(db.Integer, nullable=False)
+
+    # Settings
+    excluded_genres = db.relationship(
+        "Genre", secondary="excluded_genre", backref="excluded_by_users"
+    )
+    year_from = db.Column(db.Integer)
+    year_to = db.Column(db.Integer)
 
     liked_movies = db.relationship("Movie", secondary=liked_movies, backref="liked_by")
     disliked_movies = db.relationship(
@@ -89,6 +105,11 @@ class User(Base):
             "liked_movies": [movie.id for movie in self.liked_movies],
             "disliked_movies": [movie.id for movie in self.disliked_movies],
             "watch_later_movies": [movie.id for movie in self.watch_later_movies],
+            "settings": {
+                "excluded_genres": [genre.name for genre in self.excluded_genres],
+                "year_from": self.year_from,
+                "year_to": self.year_to,
+            },
         }
 
         return data
