@@ -396,6 +396,7 @@ const NewGenreModal = ({ show, onClose, onNewGenre }) => {
                             <Form.Control
                                 type="text"
                                 placeholder="Genre name"
+                                autoFocus={true}
                                 value={name}
                                 onChange={(event) => {
                                     setName(event.target.value);
