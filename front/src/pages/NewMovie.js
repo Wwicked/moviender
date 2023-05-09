@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
-import { Alert, Container, Spinner } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
+import CenteredSpinner from "../components/CenteredSpinner";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -597,8 +598,16 @@ const NewMovie = () => {
             });
     };
 
-    if (loading) {
-        return <Spinner />;
+    if (loading || adding) {
+        return <CenteredSpinner />;
+    }
+
+    if (success) {
+        return (
+            <Container className="my-5">
+                <Alert variant="success">Successfuly added the movie.</Alert>
+            </Container>
+        );
     }
 
     return (
@@ -719,6 +728,10 @@ const NewMovie = () => {
                                         }}
                                         onNewGenre={(newGenre) => {
                                             setAllGenres((prev) => [...prev, newGenre]);
+                                            setMovie((prev) => ({
+                                                ...prev,
+                                                genres: [...prev.genres, newGenre],
+                                            }));
                                         }}
                                     />
                                 </Form.Group>
@@ -731,7 +744,6 @@ const NewMovie = () => {
                                     {adding ? "Adding..." : "Add Movie"}
                                 </Button>
 
-                                {success && <Alert variant="success">Successfuly added the movie.</Alert>}
                                 {errorMessage.length > 0 && <Alert variant="danger">{errorMessage}</Alert>}
                                 {errors && Object.keys(errors).length > 0 && (
                                     <Alert variant="danger">
