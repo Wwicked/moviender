@@ -236,7 +236,7 @@ def pick():
     if not movies:
         return jsonify({"message": "No movies"}), 400
 
-    def not_reacted_yet(movie):
+    def not_reacted_to_yet(movie):
         if movie in user.liked_movies:
             return False
 
@@ -246,10 +246,28 @@ def pick():
         if movie in user.watch_later_movies:
             return False
 
+    def compatible_with_settings(movie):
+        if (
+            movie.release < user.settings.year_from
+            or movie.release > user.settings.year_to
+        ):
+            return False
+
+        for genre in movie.genres:
+            if genre in user.excluded_genres:
+                return False
+
         return True
 
-    movies = list(filter(not_reacted_yet, movies))
+    movies = list(filter(not_reacted_to_yet, movies))
+    movies = list(filter(compatible_with_settings, movies))
 
+    # No matches, so just pick one at complete random (as long as not reacted to yet)
+    if len(movies) == 0:
+        movies = Movie.query.all()
+        movies = list(filter(not_reacted_to_yet, movies))
+
+    # Somehow ran out of all possible movies
     if len(movies) == 0:
         return jsonify({"message": "No movies without a reaction"}), 400
 
