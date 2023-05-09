@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
-import Spinner from "react-bootstrap/Spinner";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
@@ -11,9 +9,11 @@ import PageNotFound from "./pages/PageNotFound";
 import Register from "./pages/Register";
 import { SET_USER } from "./reducers/types";
 import UserService from "./services/user.service";
-import CustomNav from "./components/Nav";
+import CustomNav from "./components/CustomNav";
 import TestPage from "./pages/TestPage";
 import { removeAuthCookiesAndHeader } from "./services/api";
+import CustomFooter from "./components/CustomFooter";
+import CenteredSpinner from "./components/CenteredSpinner";
 
 const ProtectedRoute = ({ redirectPath = "/login" }) => {
     const { user } = useSelector((state) => state.user);
@@ -67,11 +67,7 @@ const App = () => {
     }, [dispatch, cookies?.access_token, navigate, user]);
 
     if (loading) {
-        return (
-            <Container className="my-5">
-                <Spinner />
-            </Container>
-        );
+        return <CenteredSpinner />;
     }
 
     return (
@@ -92,6 +88,8 @@ const App = () => {
                 <Route exact path="/test" element={<TestPage />} />
                 <Route path="*" element={<PageNotFound />} />
             </Routes>
+
+            <CustomFooter />
         </>
     );
 };

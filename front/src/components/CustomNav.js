@@ -19,22 +19,19 @@ const NavLoggedIn = () => {
         });
     };
 
-    const handleClickHome = () => {
-        navigate("/");
-    };
-
-    const handleClickNewMovie = () => {
-        navigate("/admin/new");
-    };
+    const handleClickHome = () => navigate("/");
+    const handleClickNewMovie = () => navigate("/admin/new");
+    const handleClickSwipe = () => navigate("/");
 
     return (
-        <Navbar bg="dark" variant="dark" expand="md">
+        <Navbar bg="dark" variant="dark" expand="md" className="mb-3">
             <Container>
-                <Navbar.Brand onClick={handleClickHome}>Home</Navbar.Brand>
+                <Navbar.Brand onClick={handleClickHome}>Moviender</Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="navbar-nav" />
                 <Navbar.Collapse id="navbar-nav">
                     <Nav className="me-auto">
+                        <Nav.Link onClick={handleClickSwipe}>Swipe</Nav.Link>
                         {user?.is_admin && <Nav.Link onClick={handleClickNewMovie}>New Movie</Nav.Link>}
                     </Nav>
 
