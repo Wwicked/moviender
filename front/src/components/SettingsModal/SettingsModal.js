@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Badge, Col, Container, Row, Spinner } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_USER } from "../../reducers/types";
-import GenreService from "../../services/genre.service";
 import UserService from "../../services/user.service";
 import "./SettingsModal.css";
 import Slider from "@mui/material/Slider";
@@ -13,24 +12,11 @@ const SettingsModal = ({ show, onClose }) => {
     const DEFAULT_YEAR_RANGE = [1900, 2025];
 
     const { user } = useSelector((state) => state.user);
+    const { allGenres } = useSelector((state) => state.genres);
     const dispatch = useDispatch();
 
-    const [allGenres, setAllGenres] = useState([]);
     const [loading, setLoading] = useState(false);
     const [settings, setSettings] = useState(user?.settings);
-
-    useEffect(() => {
-        setLoading(true);
-
-        GenreService.getAll()
-            .then((res) => {
-                setAllGenres(res.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                setLoading(false);
-            });
-    }, []);
 
     const handleSelectGenre = (genre) => {
         if (settings?.excluded_genres?.includes(genre)) {

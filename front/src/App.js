@@ -7,13 +7,14 @@ import Login from "./pages/Login";
 import NewMovie from "./pages/NewMovie";
 import PageNotFound from "./pages/PageNotFound";
 import Register from "./pages/Register";
-import { SET_USER } from "./reducers/types";
+import { SET_ALL_GENRES, SET_USER } from "./reducers/types";
 import UserService from "./services/user.service";
 import CustomNav from "./components/CustomNav";
 import TestPage from "./pages/TestPage";
 import { removeAuthCookiesAndHeader } from "./services/api";
-import CustomFooter from "./components/CustomFooter";
+import CustomFooter from "./components/CustomFooter/CustomFooter";
 import CenteredSpinner from "./components/CenteredSpinner";
+import GenreService from "./services/genre.service";
 
 const ProtectedRoute = ({ redirectPath = "/login" }) => {
     const { user } = useSelector((state) => state.user);
@@ -40,14 +41,33 @@ const App = () => {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState({
+        user: true,
+        genres: true,
+    });
     const [cookies] = useCookies(["user"]);
 
     useEffect(() => {
-        setLoading(true);
+        setLoading({
+            user: true,
+            genres: true,
+        });
+
+        GenreService.getAll()
+            .then((res) => {
+                dispatch({
+                    type: SET_ALL_GENRES,
+                    payload: res.data,
+                });
+
+                setLoading((prev) => ({ ...prev, genres: false }));
+            })
+            .catch((err) => {
+                setLoading((prev) => ({ ...prev, genres: false }));
+            });
 
         if (!cookies?.access_token || user) {
-            setLoading(false);
+            setLoading((prev) => ({ ...prev, user: false }));
             return;
         }
 
@@ -58,15 +78,15 @@ const App = () => {
                     payload: res.data,
                 });
 
-                setLoading(false);
+                setLoading((prev) => ({ ...prev, user: false }));
             })
             .catch((err) => {
-                setLoading(false);
+                setLoading((prev) => ({ ...prev, user: false }));
                 navigate("/login");
             });
     }, [dispatch, cookies?.access_token, navigate, user]);
 
-    if (loading) {
+    if (loading?.user || loading?.genres) {
         return <CenteredSpinner />;
     }
 
