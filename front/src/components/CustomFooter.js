@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { Button, Modal } from "react-bootstrap";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { useSelector } from "react-redux";
 
 const Footer = () => {
     const { user } = useSelector((state) => state.user);
 
-    const [showDiscordModal, setShowDiscordModal] = useState(false);
-
     const handleClickGithub = () => window.open("https://github.com/wwicked");
-    const handleOpenDiscord = () => setShowDiscordModal(true);
-    const handleCloseDiscord = () => setShowDiscordModal(false);
 
     if (!user) {
         return;
@@ -29,29 +24,6 @@ const Footer = () => {
                     cursor: "pointer",
                 }}
             />
-
-            <FontAwesomeIcon
-                icon={faDiscord}
-                size="lg"
-                color="white"
-                focusable={true}
-                onClick={handleOpenDiscord}
-                style={{
-                    cursor: "pointer",
-                }}
-            />
-
-            <Modal show={showDiscordModal} onHide={handleCloseDiscord} size="sm">
-                <Modal.Header closeButton>
-                    <Modal.Title>Robiin#3683</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Footer>
-                    <Button onClick={handleCloseDiscord} variant="secondary">
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </div>
     );
 };
