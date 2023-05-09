@@ -74,12 +74,12 @@ def update_settings(user_id):
         user.excluded_genres = genres
         db.session.commit()
 
-    year_from = data.get("year_from", None)
-    if year_from and year_from < Config.MIN_YEAR_FROM:
+    year_from = int(data.get("year_from", -1))
+    if year_from != -1 and year_from and year_from < Config.MIN_YEAR_FROM:
         user.year_from = year_from
 
-    year_to = data.get("year_to", None)
-    if year_to and year_to > Config.MIN_YEAR_TO:
+    year_to = int(data.get("year_to", -1))
+    if year_to != -1 and year_to and year_to > Config.MIN_YEAR_TO:
         user.year_to = year_to
 
     return jsonify(user.to_dict()), 200
