@@ -47,6 +47,7 @@ const NavLoggedIn = () => {
                                 onClick={() => {
                                     setShowSettings(true);
                                 }}
+                                color="white"
                             />
 
                             {showSettings && (
