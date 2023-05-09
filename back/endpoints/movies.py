@@ -160,7 +160,6 @@ def add_movie():
     ok, message = validate_movie_data(data, images)
 
     if not ok:
-        current_app.logger.info(f"Return message: {message}")
         return jsonify({"message": message}), 400
 
     title = data.get("title")
