@@ -5,11 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { removeAuthCookiesAndHeader } from "../services/api";
 import { SET_USER } from "../reducers/types";
+import SettingsModal from "./SettingsModal/SettingsModal";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 
 const NavLoggedIn = () => {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [showSettings, setShowSettings] = useState(false);
 
     const handleClickLogOut = () => {
         removeAuthCookiesAndHeader();
@@ -36,7 +41,20 @@ const NavLoggedIn = () => {
                     </Nav>
 
                     <Nav className="justify-content-end">
-                        <Nav.Link>Hello, {user?.username}</Nav.Link>
+                        <Nav.Link>
+                            <FontAwesomeIcon
+                                icon={faCog}
+                                onClick={() => {
+                                    setShowSettings(true);
+                                }}
+                            />
+                            <SettingsModal
+                                show={showSettings}
+                                onClose={() => {
+                                    setShowSettings(false);
+                                }}
+                            />
+                        </Nav.Link>
                         <Nav.Link onClick={handleClickLogOut}>Log out</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
