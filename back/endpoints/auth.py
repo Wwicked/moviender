@@ -54,6 +54,9 @@ def register():
         password=pbkdf2_sha256.encrypt(password),
         joined=int(time()),
         is_admin=is_first_user,
+        excluded_genres=[],
+        year_from=Config.MIN_YEAR_FROM,
+        year_to=Config.MAX_YEAR_TO,
     )
 
     db.session.add(user)
