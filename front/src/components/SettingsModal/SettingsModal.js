@@ -125,7 +125,10 @@ const SettingsModal = ({ show, onClose }) => {
                                 size="medium"
                                 min={DEFAULT_YEAR_RANGE[0]}
                                 max={DEFAULT_YEAR_RANGE[1]}
-                                value={[settings.yearFrom, settings.yearTo]}
+                                value={[
+                                    settings?.yearFrom || DEFAULT_YEAR_RANGE[0],
+                                    settings?.yearTo || DEFAULT_YEAR_RANGE[1],
+                                ]}
                                 onChange={handleYearRangeChange}
                                 style={{
                                     maxWidth: "95%",
