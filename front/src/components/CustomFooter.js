@@ -13,7 +13,10 @@ const Footer = () => {
     }
 
     return (
-        <div className="d-flex justify-content-center gap-4 p-3 mt-3" style={{ backgroundColor: "rgba(33, 37, 41)" }}>
+        <div
+            className="d-flex justify-content-center gap-4 p-3 mt-3 fixed-bottom"
+            style={{ backgroundColor: "rgba(33, 37, 41)" }}
+        >
             <FontAwesomeIcon
                 icon={faGithub}
                 size="lg"
