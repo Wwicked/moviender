@@ -77,9 +77,11 @@ def update_settings(user_id):
     year_from = int(data.get("year_from", -1))
     if year_from != -1 and year_from and year_from < Config.MIN_YEAR_FROM:
         user.year_from = year_from
+        db.session.commit()
 
     year_to = int(data.get("year_to", -1))
     if year_to != -1 and year_to and year_to > Config.MAX_YEAR_TO:
         user.year_to = year_to
+        db.session.commit()
 
     return jsonify(user.to_dict()), 200
