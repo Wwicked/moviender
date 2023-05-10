@@ -35,8 +35,8 @@ const SettingsModal = ({ show, onClose }) => {
     const handleYearRangeChange = (event, newValue) => {
         setSettings((prev) => ({
             ...prev,
-            yearFrom: newValue[0],
-            yearTo: newValue[1],
+            year_from: newValue[0],
+            year_to: newValue[1],
         }));
     };
 
@@ -112,8 +112,8 @@ const SettingsModal = ({ show, onClose }) => {
                                 min={DEFAULT_YEAR_RANGE[0]}
                                 max={DEFAULT_YEAR_RANGE[1]}
                                 value={[
-                                    settings?.yearFrom || DEFAULT_YEAR_RANGE[0],
-                                    settings?.yearTo || DEFAULT_YEAR_RANGE[1],
+                                    settings?.year_from || DEFAULT_YEAR_RANGE[0],
+                                    settings?.year_to || DEFAULT_YEAR_RANGE[1],
                                 ]}
                                 onChange={handleYearRangeChange}
                                 style={{
