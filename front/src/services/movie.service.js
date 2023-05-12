@@ -18,9 +18,20 @@ const loadNext = () => {
     return api.get(`/movies/pick`);
 };
 
+const getMovie = (id) => {
+    return api.get(`/movies/${id}`);
+};
+
+const getGenre = (id) => {
+    return api.get(`/movies/${id}/genre`);
+};
+
 const MovieService = {
     newMovie,
     loadNext,
+
+    getMovie,
+    getGenre,
 };
 
 export default MovieService;

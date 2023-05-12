@@ -283,6 +283,14 @@ def get(movie_id):
     return jsonify(movie.to_dict()), 200
 
 
+@movies_blueprint.route("<int:movie_id>/genre", methods=["GET"])
+@jwt_required()
+def get_genre(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    genres = [genre.name for genre in movie.genres]
+    return jsonify(genres), 200
+
+
 @movies_blueprint.route("/<int:movie_id>/images/<path:filename>", methods=["GET"])
 def send_movie_image(movie_id, filename):
     directory = os.path.join(
