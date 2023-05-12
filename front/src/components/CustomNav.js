@@ -1,11 +1,12 @@
+import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { removeAuthCookiesAndHeader } from "../services/api";
 import { SET_USER } from "../reducers/types";
-import { useState } from "react";
+import { removeAuthCookiesAndHeader } from "../services/api";
+import Profile from "./Profile/Profile";
 import SettingsModal from "./SettingsModal/SettingsModal";
 
 const NavLoggedIn = () => {
@@ -14,11 +15,13 @@ const NavLoggedIn = () => {
     const navigate = useNavigate();
 
     const [showSettings, setShowSettings] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
 
     const handleClickHome = () => navigate("/");
     const handleClickNewMovie = () => navigate("/admin/new");
     const handleClickSwipe = () => navigate("/");
-    const handleClickProfile = () => navigate("/profile");
+    const handleClickProfile = () => setShowProfile(true);
+    const handleCloseProfile = () => setShowProfile(false);
     const handleClickSettings = () => setShowSettings(true);
     const handleCloseSettings = () => setShowSettings(false);
     const handleClickLogOut = () => {
@@ -52,6 +55,7 @@ const NavLoggedIn = () => {
             </Navbar>
 
             {showSettings && <SettingsModal show={showSettings} onClose={handleCloseSettings} />}
+            {showProfile && <Profile show={showProfile} onClose={handleCloseProfile} />}
         </>
     );
 };
