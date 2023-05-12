@@ -50,6 +50,7 @@ const SettingsModal = ({ show, onClose }) => {
                     payload: res.data,
                 });
 
+                setSettings(res?.data?.settings);
                 setLoading(false);
             })
             .catch((err) => {
@@ -85,7 +86,7 @@ const SettingsModal = ({ show, onClose }) => {
                             <div className="genres-list">
                                 {allGenres?.map((genre) => (
                                     <Badge
-                                        bg={`${settings.excluded_genres.includes(genre) ? "secondary" : "primary"}`}
+                                        bg={`${settings?.excluded_genres?.includes(genre) ? "secondary" : "primary"}`}
                                         className="m-1"
                                         onClick={() => {
                                             handleSelectGenre(genre);
