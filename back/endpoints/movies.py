@@ -233,7 +233,7 @@ def pick():
     user = User.query.filter_by(token=get_jwt_identity()).first_or_404()
     movies = Movie.query.all()
 
-    if not movies:
+    if len(movies) == 0:
         return jsonify({"message": "No movies"}), 400
 
     def not_reacted_to_yet(movie):
@@ -246,11 +246,10 @@ def pick():
         if movie in user.watch_later_movies:
             return False
 
+        return True
+
     def compatible_with_settings(movie):
-        if (
-            movie.release < user.settings.year_from
-            or movie.release > user.settings.year_to
-        ):
+        if movie.release < user.year_from or movie.release > user.year_to:
             return False
 
         for genre in movie.genres:
@@ -262,7 +261,7 @@ def pick():
     movies = list(filter(not_reacted_to_yet, movies))
     movies = list(filter(compatible_with_settings, movies))
 
-    # No matches, so just pick one at complete random (as long as not reacted to yet)
+    # No matches, so just pick one without reaction
     if len(movies) == 0:
         movies = Movie.query.all()
         movies = list(filter(not_reacted_to_yet, movies))
