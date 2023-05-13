@@ -32,6 +32,14 @@ def like(user_id):
     return jsonify({"message": "Success"}), 200
 
 
+@users_blueprint.route("/<int:user_id>/likes", methods=["GET"])
+@jwt_required()
+def get_likes(user_id):
+    user = User.query.get_or_404(user_id)
+    ids = [movie.id for movie in user.liked_movies]
+    return jsonify(ids), 200
+
+
 @users_blueprint.route("/<int:user_id>/dislikes", methods=["POST"])
 @jwt_required()
 def dislike(user_id):
