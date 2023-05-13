@@ -38,12 +38,17 @@ const updateSettings = (user_id, settings) => {
     return api.post(`/users/${user_id}/settings`, data);
 };
 
+const getLikedMovies = (user_id) => {
+    return api.get(`/users/${user_id}/likes`);
+};
+
 const UserService = {
     read,
     like,
     dislike,
     watchLater,
     updateSettings,
+    getLikedMovies,
 };
 
 export default UserService;
