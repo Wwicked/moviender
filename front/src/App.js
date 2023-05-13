@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
@@ -44,7 +44,6 @@ const App = () => {
         user: true,
         genres: true,
     });
-    const [cookies] = useCookies(["user"]);
 
     useEffect(() => {
         setLoading({
@@ -65,10 +64,14 @@ const App = () => {
                 setLoading((prev) => ({ ...prev, genres: false }));
             });
 
-        if (!cookies?.access_token || user) {
+        const token = Cookies.get("access_token");
+
+        if (!token || user) {
             setLoading((prev) => ({ ...prev, user: false }));
             return;
         }
+
+        console.log(`Token: ${token} User: ${JSON.stringify(user)}`);
 
         UserService.read()
             .then((res) => {
@@ -83,7 +86,7 @@ const App = () => {
                 setLoading((prev) => ({ ...prev, user: false }));
                 navigate("/login");
             });
-    }, [dispatch, cookies?.access_token, navigate, user]);
+    }, [dispatch, navigate, user]);
 
     if (loading?.user || loading?.genres) {
         return <CenteredSpinner />;
