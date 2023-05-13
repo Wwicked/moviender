@@ -10,7 +10,6 @@ import Register from "./pages/Register";
 import { SET_ALL_GENRES, SET_USER } from "./reducers/types";
 import UserService from "./services/user.service";
 import CustomNav from "./components/CustomNav";
-import TestPage from "./pages/TestPage";
 import { removeAuthCookiesAndHeader } from "./services/api";
 import CustomFooter from "./components/CustomFooter/CustomFooter";
 import CenteredSpinner from "./components/CenteredSpinner";
