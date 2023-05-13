@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_USER } from "../reducers/types";
 import { removeAuthCookiesAndHeader } from "../services/api";
-import Profile from "./Profile/Profile";
+import Stats from "./Stats/Stats";
 import SettingsModal from "./SettingsModal/SettingsModal";
 
 const NavLoggedIn = () => {
@@ -15,13 +15,13 @@ const NavLoggedIn = () => {
     const navigate = useNavigate();
 
     const [showSettings, setShowSettings] = useState(false);
-    const [showProfile, setShowProfile] = useState(false);
+    const [showStats, setShowStats] = useState(false);
 
     const handleClickHome = () => navigate("/");
     const handleClickNewMovie = () => navigate("/admin/new");
     const handleClickSwipe = () => navigate("/");
-    const handleClickProfile = () => setShowProfile(true);
-    const handleCloseProfile = () => setShowProfile(false);
+    const handleClickStats = () => setShowStats(true);
+    const handleCloseStats = () => setShowStats(false);
     const handleClickSettings = () => setShowSettings(true);
     const handleCloseSettings = () => setShowSettings(false);
     const handleClickLogOut = () => {
@@ -48,7 +48,7 @@ const NavLoggedIn = () => {
                         </Nav>
 
                         <Nav className="justify-content-end">
-                            <Nav.Link onClick={handleClickProfile}>Profile</Nav.Link>
+                            <Nav.Link onClick={handleClickStats}>Statistics</Nav.Link>
                             <Nav.Link onClick={handleClickSettings}>Settings</Nav.Link>
                             <Nav.Link onClick={handleClickLogOut}>Log out</Nav.Link>
                         </Nav>
@@ -57,7 +57,7 @@ const NavLoggedIn = () => {
             </Navbar>
 
             {showSettings && <SettingsModal show={showSettings} onClose={handleCloseSettings} />}
-            {showProfile && <Profile show={showProfile} onClose={handleCloseProfile} />}
+            {showStats && <Stats show={showStats} onClose={handleCloseStats} />}
         </>
     );
 };
