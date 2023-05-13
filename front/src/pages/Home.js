@@ -57,51 +57,48 @@ const Home = () => {
         if (clicked) return;
 
         setClicked(true);
+        setSwipeDirection("right");
 
         UserService.like(user.id, movie.id)
             .then((res) => {
-                setSwipeDirection("right");
                 setClicked(false);
+                loadNextMovie();
             })
             .catch((err) => {
                 setClicked(false);
             });
-
-        loadNextMovie();
     };
 
     const handleDislike = (movie) => {
         if (clicked) return;
 
         setClicked(true);
+        setSwipeDirection("left");
 
         UserService.dislike(user.id, movie.id)
             .then((res) => {
-                setSwipeDirection("left");
                 setClicked(false);
+                loadNextMovie();
             })
             .catch((err) => {
                 setClicked(false);
             });
-
-        loadNextMovie();
     };
 
     const handleWatchLater = (movie) => {
         if (clicked) return;
 
         setClicked(true);
+        setSwipeDirection("up");
 
         UserService.watchLater(user.id, movie.id)
             .then((res) => {
-                setSwipeDirection("up");
                 setClicked(false);
+                loadNextMovie();
             })
             .catch((err) => {
                 setClicked(false);
             });
-
-        loadNextMovie();
     };
 
     const handleInfo = (movie) => {
@@ -117,8 +114,8 @@ const Home = () => {
     const handleTransitionEnd = () => {
         if (!["up", "left", "right"].includes(swipeDirection) || clicked) return;
 
-        setSwipeDirection(null);
         setMovies((prev) => prev.slice(1));
+        setSwipeDirection(null);
     };
 
     return (
@@ -188,6 +185,7 @@ const Home = () => {
                         onWatchLater={handleWatchLater}
                         onInfo={handleInfo}
                     />
+
                     <InfoModal show={showModal} movie={modalData} onClose={handleModalClose} />
                 </div>
             )}
