@@ -160,10 +160,6 @@ const Loginnew = () => {
                         <Button className="mb-4 w-100 gradient-custom-2" role="submit" type="submit" disabled={loading}>
                             {loading ? <Spinner animation="border" variant="light" size="sm" /> : "Sign in"}
                         </Button>
-
-                        <a className="text-dark" href="#!">
-                            Forgot password?
-                        </a>
                     </div>
                 </Form>
 
