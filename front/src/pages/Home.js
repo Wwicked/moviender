@@ -122,82 +122,75 @@ const Home = () => {
     };
 
     return (
-        <Container>
-            <Container className="d-flex justify-content-center my-2">
-                {loading && (
-                    <EmptyCard
-                        title={failedToLoad ? "Failed to load..." : <Spinner />}
-                        subtitle={
-                            failedToLoad ? (
-                                <Button
-                                    onClick={() => {
-                                        loadNextMovie();
-                                    }}
-                                    size="sm"
-                                >
-                                    Try again?
-                                </Button>
-                            ) : (
-                                "Loading..."
-                            )
-                        }
-                    />
-                )}
-
-                {movies.length === 0 && !loading && (
-                    <EmptyCard
-                        title="You've ran out of movies!"
-                        subtitle={
-                            <span
+        <Container className="d-flex justify-content-center my-2 main-content">
+            {loading && (
+                <EmptyCard
+                    title={failedToLoad ? "Failed to load..." : <Spinner />}
+                    subtitle={
+                        failedToLoad ? (
+                            <Button
                                 onClick={() => {
-                                    setShowSettings(true);
+                                    loadNextMovie();
                                 }}
+                                size="sm"
                             >
-                                Try fixing the criteria <FontAwesomeIcon icon={faCog} />
-                            </span>
-                        }
-                    />
-                )}
+                                Try again?
+                            </Button>
+                        ) : (
+                            "Loading..."
+                        )
+                    }
+                />
+            )}
 
-                {showSettings && (
-                    <SettingsModal
-                        show={showSettings}
-                        onClose={() => {
-                            setShowSettings(false);
-                        }}
-                    />
-                )}
-
-                {movies.length > 1 && (
-                    <div className="under">
-                        <MovieCard
-                            movie={movies[1]}
-                            onLike={() => {}}
-                            onDislike={() => {}}
-                            onWatchLater={() => {}}
-                            onInfo={() => {}}
-                        />
-                    </div>
-                )}
-
-                {movies.length > 0 && (
-                    <>
-                        <div
-                            className={`over ${swipeDirection ? swipeDirection : ""}`}
-                            onTransitionEnd={handleTransitionEnd}
+            {movies.length === 0 && !loading && (
+                <EmptyCard
+                    title="You've ran out of movies!"
+                    subtitle={
+                        <span
+                            onClick={() => {
+                                setShowSettings(true);
+                            }}
                         >
-                            <MovieCard
-                                movie={movies[0]}
-                                onLike={handleLike}
-                                onDislike={handleDislike}
-                                onWatchLater={handleWatchLater}
-                                onInfo={handleInfo}
-                            />
-                        </div>
-                        <InfoModal show={showModal} movie={modalData} onClose={handleModalClose} />
-                    </>
-                )}
-            </Container>
+                            Try fixing the criteria <FontAwesomeIcon icon={faCog} />
+                        </span>
+                    }
+                />
+            )}
+
+            {showSettings && (
+                <SettingsModal
+                    show={showSettings}
+                    onClose={() => {
+                        setShowSettings(false);
+                    }}
+                />
+            )}
+
+            {movies.length > 1 && (
+                <div className="under">
+                    <MovieCard
+                        movie={movies[1]}
+                        onLike={() => {}}
+                        onDislike={() => {}}
+                        onWatchLater={() => {}}
+                        onInfo={() => {}}
+                    />
+                </div>
+            )}
+
+            {movies.length > 0 && (
+                <div className={`over ${swipeDirection ? swipeDirection : ""}`} onTransitionEnd={handleTransitionEnd}>
+                    <MovieCard
+                        movie={movies[0]}
+                        onLike={handleLike}
+                        onDislike={handleDislike}
+                        onWatchLater={handleWatchLater}
+                        onInfo={handleInfo}
+                    />
+                    <InfoModal show={showModal} movie={modalData} onClose={handleModalClose} />
+                </div>
+            )}
         </Container>
     );
 };

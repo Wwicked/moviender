@@ -71,8 +71,6 @@ const App = () => {
             return;
         }
 
-        console.log(`Token: ${token} User: ${JSON.stringify(user)}`);
-
         UserService.read()
             .then((res) => {
                 dispatch({
