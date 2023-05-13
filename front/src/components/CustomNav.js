@@ -36,7 +36,9 @@ const NavLoggedIn = () => {
         <>
             <Navbar bg="dark" variant="dark" expand="md" className="mb-3">
                 <Container>
-                    <Navbar.Brand onClick={handleClickHome}>Moviender</Navbar.Brand>
+                    <Navbar.Brand onClick={handleClickHome} style={{ cursor: "pointer" }}>
+                        Moviender
+                    </Navbar.Brand>
 
                     <Navbar.Toggle aria-controls="navbar-nav" />
                     <Navbar.Collapse id="navbar-nav">
