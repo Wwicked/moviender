@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import InfoModal from "../components/MovieCard/InfoModal";
+import InfoModal from "../components/InfoModal/InfoModal";
 import MovieCard from "../components/MovieCard/MovieCard";
 import "./NewMovie.css";
 import { ListGroup } from "react-bootstrap";

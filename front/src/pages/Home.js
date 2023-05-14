@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import EmptyCard from "../components/EmptyCard/EmptyCard";
-import InfoModal from "../components/MovieCard/InfoModal";
+import InfoModal from "../components/InfoModal/InfoModal";
 import MovieCard from "../components/MovieCard/MovieCard";
 import MovieService from "../services/movie.service";
 import UserService from "../services/user.service";
