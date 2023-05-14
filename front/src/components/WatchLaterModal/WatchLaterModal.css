@@ -1,0 +1,17 @@
+.movie-image {
+    width: 280px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.movie-info {
+    width: 100%;
+    padding-left: 10px;
+}
+
+@media (max-width: 768px) {
+    .movie-image {
+        width: 180px;
+        height: 140px;
+    }
+}

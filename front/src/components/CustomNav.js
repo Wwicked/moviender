@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_USER } from "../reducers/types";
 import { removeAuthCookiesAndHeader } from "../services/api";
-import Stats from "./Stats/Stats";
 import SettingsModal from "./SettingsModal/SettingsModal";
+import StatsModal from "./StatsModal/StatsModal";
+import WatchLaterModal from "./WatchLaterModal/WatchLaterModal";
 
 const NavLoggedIn = () => {
     const { user } = useSelector((state) => state.user);
@@ -16,14 +17,21 @@ const NavLoggedIn = () => {
 
     const [showSettings, setShowSettings] = useState(false);
     const [showStats, setShowStats] = useState(false);
+    const [showWatchLater, setShowWatchLater] = useState(false);
 
     const handleClickHome = () => navigate("/");
     const handleClickNewMovie = () => navigate("/admin/new");
     const handleClickSwipe = () => navigate("/");
+
+    const handleClickWatchLater = () => setShowWatchLater(true);
+    const handleCloseWatchLater = () => setShowWatchLater(false);
+
     const handleClickStats = () => setShowStats(true);
     const handleCloseStats = () => setShowStats(false);
+
     const handleClickSettings = () => setShowSettings(true);
     const handleCloseSettings = () => setShowSettings(false);
+
     const handleClickLogOut = () => {
         removeAuthCookiesAndHeader();
         dispatch({
@@ -48,6 +56,7 @@ const NavLoggedIn = () => {
                         </Nav>
 
                         <Nav className="justify-content-end">
+                            <Nav.Link onClick={handleClickWatchLater}>Watch later</Nav.Link>
                             <Nav.Link onClick={handleClickStats}>Statistics</Nav.Link>
                             <Nav.Link onClick={handleClickSettings}>Settings</Nav.Link>
                             <Nav.Link onClick={handleClickLogOut}>Log out</Nav.Link>
@@ -56,8 +65,9 @@ const NavLoggedIn = () => {
                 </Container>
             </Navbar>
 
+            {showWatchLater && <WatchLaterModal show={showWatchLater} onClose={handleCloseWatchLater} />}
+            {showStats && <StatsModal show={showStats} onClose={handleCloseStats} />}
             {showSettings && <SettingsModal show={showSettings} onClose={handleCloseSettings} />}
-            {showStats && <Stats show={showStats} onClose={handleCloseStats} />}
         </>
     );
 };
