@@ -28,6 +28,14 @@ const watchLater = (user_id, movie_id) => {
     return api.post(`/users/${user_id}/watch-later`, data);
 };
 
+const removeWatchLater = (user_id, movie_id) => {
+    const data = new FormData();
+
+    data.append("movie_id", movie_id);
+
+    return api.delete(`/users/${user_id}/watch-later`, { data: data });
+};
+
 const updateSettings = (user_id, settings) => {
     const data = new FormData();
 
@@ -42,13 +50,22 @@ const getLikedMovies = (user_id) => {
     return api.get(`/users/${user_id}/likes`);
 };
 
+const getWatchLater = (user_id) => {
+    return api.get(`/users/${user_id}/watch-later`);
+};
+
 const UserService = {
     read,
+
     like,
     dislike,
     watchLater,
+
+    removeWatchLater,
+
     updateSettings,
     getLikedMovies,
+    getWatchLater,
 };
 
 export default UserService;
