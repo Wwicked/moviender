@@ -149,7 +149,15 @@ const Home = () => {
                                 setShowSettings(true);
                             }}
                         >
-                            Try fixing the criteria <FontAwesomeIcon icon={faCog} />
+                            Try fixing the criteria
+                            <Button
+                                variant="outline-secondary"
+                                style={{ borderRadius: "50%" }}
+                                size="sm"
+                                className="mx-2"
+                            >
+                                <FontAwesomeIcon icon={faCog} />
+                            </Button>
                         </span>
                     }
                 />
