@@ -48,7 +48,7 @@ const ChartBorderColors = [
     "rgba(165, 42, 42, 1)",
 ];
 
-const Stats = ({ show, onClose }) => {
+const StatsModal = ({ show, onClose }) => {
     const { user } = useSelector((state) => state.user);
 
     const [loading, setLoading] = useState(false);
@@ -150,4 +150,4 @@ const Stats = ({ show, onClose }) => {
     );
 };
 
-export default Stats;
+export default StatsModal;
