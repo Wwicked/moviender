@@ -104,7 +104,18 @@ const WatchLaterModal = ({ show, onClose }) => {
                             <Col className="text-center">
                                 <p>You did not save any movies to your Watch Later list</p>
                                 <p>
-                                    When swiping, click <FontAwesomeIcon icon={faClock} /> to see some movies here!
+                                    When swiping, click
+                                    <Button
+                                        variant="outline-primary"
+                                        size="sm"
+                                        style={{
+                                            borderRadius: "50%",
+                                        }}
+                                        className="mx-2"
+                                    >
+                                        <FontAwesomeIcon icon={faClock} />
+                                    </Button>
+                                    to see some movies here
                                 </p>
                             </Col>
                         </Row>

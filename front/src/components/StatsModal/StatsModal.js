@@ -9,6 +9,8 @@ import MovieService from "../../services/movie.service";
 import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import UserService from "../../services/user.service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -135,8 +137,26 @@ const StatsModal = ({ show, onClose }) => {
                 <Row>
                     <Container className="entry-title mb-2">Liked movies by genre</Container>
                     <Container className="entry-value">
+                        {!loadedData && (
+                            <div className="text-center">
+                                <p>You haven't liked any movies yet</p>
+                                <p>
+                                    Click the
+                                    <Button
+                                        variant="outline-success"
+                                        size="sm"
+                                        style={{
+                                            borderRadius: "50%",
+                                        }}
+                                        className="mx-2"
+                                    >
+                                        <FontAwesomeIcon icon={faHeart} />
+                                    </Button>
+                                    icon for movies to pop up here
+                                </p>
+                            </div>
+                        )}
                         {data && loadedData && <Doughnut data={data} options={{ responsive: true }} />}
-                        {data && !loadedData && <Doughnut data={data} options={{ responsive: true }} />}
                     </Container>
                 </Row>
             </Modal.Body>
