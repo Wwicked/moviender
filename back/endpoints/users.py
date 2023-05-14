@@ -97,7 +97,7 @@ def update_settings(user_id):
 
     names = loads(data.get("excluded_genres", []))
     genres = Genre.query.filter(Genre.name.in_(names)).all()
-    if genres:
+    if genres is not None:
         user.excluded_genres = genres
         db.session.commit()
 
