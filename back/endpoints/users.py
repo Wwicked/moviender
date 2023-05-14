@@ -26,8 +26,7 @@ def like(user_id):
 
     if movie not in user.liked_movies:
         user.liked_movies.append(movie)
-
-    db.session.commit()
+        db.session.commit()
 
     return jsonify({"message": "Success"}), 200
 
@@ -49,8 +48,7 @@ def dislike(user_id):
 
     if movie not in user.disliked_movies:
         user.disliked_movies.append(movie)
-
-    db.session.commit()
+        db.session.commit()
 
     return jsonify({"message": "Success"}), 200
 
@@ -64,8 +62,29 @@ def watch_later(user_id):
 
     if movie not in user.watch_later_movies:
         user.watch_later_movies.append(movie)
+        db.session.commit()
 
-    db.session.commit()
+    return jsonify({"message": "Success"}), 200
+
+
+@users_blueprint.route("/<int:user_id>/watch-later", methods=["GET"])
+@jwt_required()
+def get_watch_later(user_id):
+    user = User.query.get_or_404(user_id)
+    ids = [movie.id for movie in user.watch_later_movies]
+    return jsonify(ids), 200
+
+
+@users_blueprint.route("/<int:user_id>/watch-later", methods=["DELETE"])
+@jwt_required()
+def remove_watch_later(user_id):
+    user = User.query.get_or_404(user_id)
+    movie_id = request.form.to_dict().get("movie_id")
+    movie = Movie.query.get_or_404(movie_id)
+
+    if movie in user.watch_later_movies:
+        user.watch_later_movies.remove(movie)
+        db.session.commit()
 
     return jsonify({"message": "Success"}), 200
 
