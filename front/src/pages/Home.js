@@ -31,9 +31,9 @@ const Home = () => {
         setLoading(true);
         setFailedToLoad(false);
 
-        Promise.all([MovieService.loadNext(), MovieService.loadNext()])
-            .then((responses) => {
-                const movies = responses.map((response) => response.data);
+        MovieService.loadNext(2)
+            .then((res) => {
+                const movies = res.data;
                 setMovies(movies);
                 setLoading(false);
                 setFailedToLoad(false);
@@ -46,9 +46,9 @@ const Home = () => {
     }, []);
 
     const loadNextMovie = () => {
-        MovieService.loadNext()
+        MovieService.loadNext(1)
             .then((res) => {
-                setMovies((prev) => [...prev, res.data]);
+                setMovies((prev) => [...prev, res?.data[0]]);
             })
             .catch((err) => {});
     };
@@ -112,7 +112,7 @@ const Home = () => {
     };
 
     const handleTransitionEnd = () => {
-        if (!["up", "left", "right"].includes(swipeDirection) || clicked) return;
+        if (!["up", "left", "right"].includes(swipeDirection)) return;
 
         setMovies((prev) => prev.slice(1));
         setSwipeDirection(null);

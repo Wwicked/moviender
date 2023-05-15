@@ -14,8 +14,12 @@ const newMovie = (movie) => {
     return api.post(`/movies/new`, data);
 };
 
-const loadNext = () => {
-    return api.get(`/movies/pick`);
+const loadNext = (amount) => {
+    const data = new FormData();
+
+    data.append("amount", amount);
+
+    return api.get(`/movies/pick`, { data: data });
 };
 
 const getMovie = (id) => {

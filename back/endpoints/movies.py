@@ -232,6 +232,7 @@ def add_movie():
 def pick():
     user = User.query.filter_by(token=get_jwt_identity()).first_or_404()
     movies = Movie.query.all()
+    amount = request.form.to_dict().get("amount", 1)
 
     if len(movies) == 0:
         return jsonify({"message": "No movies"}), 400
@@ -270,8 +271,11 @@ def pick():
     if len(movies) == 0:
         return jsonify({"message": "No movies without a reaction"}), 400
 
-    movie = random.choice(movies)
-    data = movie.to_dict()
+    if len(movies) < amount:
+        amount = len(movies)
+
+    chosen_movies = random.sample(movies, amount)
+    data = [movie.to_dict() for movie in chosen_movies]
 
     return jsonify(data), 200
 
