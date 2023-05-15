@@ -114,8 +114,8 @@ const Home = () => {
     const handleTransitionEnd = () => {
         if (!["up", "left", "right"].includes(swipeDirection)) return;
 
-        setMovies((prev) => prev.slice(1));
         setSwipeDirection(null);
+        setMovies((prev) => prev.slice(1));
     };
 
     return (
