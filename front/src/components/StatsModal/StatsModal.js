@@ -135,7 +135,7 @@ const StatsModal = ({ show, onClose }) => {
 
             <Modal.Body>
                 <Row>
-                    <Container className="entry-title mb-2">Liked movies by genre</Container>
+                    <Container className="entry-title mb-2">Genres you liked</Container>
                     <Container className="entry-value">
                         {!loadedData && (
                             <div className="text-center">
