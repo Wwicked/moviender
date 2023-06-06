@@ -440,7 +440,7 @@ const NewMovie = () => {
                 .array()
                 .of(yup.string())
                 .test("genres", "Please choose at least one genre", () => movie.genres.length > 0),
-            cast: yup.array().of(yup.string()),
+            cast: yup.array().of(yup.mixed()),
             fun_facts: yup.array().of(yup.mixed()),
             images: yup
                 .array()
